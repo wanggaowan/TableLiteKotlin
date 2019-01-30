@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:onClick="addRow"
+            android:text="增加一行"
+            android:textSize="6sp"/>
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:onClick="addColumn"
+            android:text="增加一列"
+            android:textSize="6sp"/>
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:onClick="deleteRow"
+            android:text="删除一行"
+            android:textSize="6sp"/>
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:onClick="deleteColumn"
+            android:text="删除一列"
+            android:textSize="6sp"/>
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:onClick="areaupdate"
+            android:text="局部更新"
+            android:textSize="6sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:onClick="swapRow"
+            android:text="swapRow"
+            android:textSize="6sp"/>
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:onClick="swapColumn"
+            android:text="swapColumn"
+            android:textSize="6sp"/>
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:onClick="testZero"
+            android:text="testZero"
+            android:textSize="6sp"/>
+    </LinearLayout>
+
+    <com.keqiang.table.kotlin.SurfaceTable
+        android:id="@+id/tableSurface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"/>
+</LinearLayout>

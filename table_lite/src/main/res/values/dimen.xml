@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="drag_image_size">20dp</dimen>
+    <dimen name="column_drag_image_vertical_offset">5dp</dimen>
+    <dimen name="row_drag_image_horizontal_offset">2dp</dimen>
+    <dimen name="first_row_column_drag_image_vertical_offset">0dp</dimen>
+    <dimen name="first_row_column_drag_image_horizontal_offset">2dp</dimen>
+</resources>
