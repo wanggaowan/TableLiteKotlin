@@ -72,28 +72,28 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 该实现主要目的是作为一种绘制Demo，建议根据自己的需求实现自定义IDraw**
 
 #### SurfaceTable中独有的方法
-```java
+```kotlin
  /**
-  * 以同步方式局部刷新单元格
-  *
-  * @param row    需要刷新的单元格所在行
-  * @param column 需要刷新的单元格所在列
-  * @param data   新数据
-  */
-  public void syncReDrawCell(int row, int column, Object data) {
-      // 代码省略
-  }
-
- /**
-  * 以异步方式局部刷新单元格
-  *
-  * @param row    需要刷新的单元格所在行
-  * @param column 需要刷新的单元格所在列
-  * @param data   新数据
-  */
-  public void asyncReDrawCell(int row, int column, Object data) {
-      // 代码省略
-  }
+      * 以异步方式局部刷新单元格
+      *
+      * @param row    需要刷新的单元格所在行
+      * @param column 需要刷新的单元格所在列
+      * @param data   新数据
+      */
+     fun asyncReDrawCell(row: Int, column: Int, data: Any) {
+        // 代码省略
+     }
+ 
+     /**
+      * 以同步方式局部刷新单元格
+      *
+      * @param row    需要刷新的单元格所在行
+      * @param column 需要刷新的单元格所在列
+      * @param data   新数据
+      */
+     fun syncReDrawCell(row: Int, column: Int, data: Any) {
+         // 代码省略
+     }
 ```
 
 #### Proguard
