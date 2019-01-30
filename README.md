@@ -29,19 +29,17 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 
 3. 使用表格View
    ```xml
-   <com.keqiang.table.Table
+    <com.keqiang.table.kotlin.Table
            android:id="@+id/table"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
-           android:layout_margin="10dp"
            android:background="@android:color/white"/>
            
-   <com.keqiang.table.SurfaceTable
+    <com.keqiang.table.kotlin.SurfaceTable
            android:id="@+id/tableSurface"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
-           android:layout_margin="10dp"
-           android:background="@android:color/white"/>        
+           android:background="@android:color/white"/>      
    ```
 #### 下面对Table和SurfaceTable中主要的类进行说明：
 **1.TableConfig(表格全局数据配置)，可配置项如下：**
