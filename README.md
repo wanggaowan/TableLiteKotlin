@@ -68,7 +68,7 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 以及如果要自适应宽高时实现测量宽高值逻辑，另外将数据源绑定到Cell，这样就无需接口
 模型转换成特定对象才可以使用。**
 
-**5.IDraw(接口)，用于处理单元格绘制逻辑，目前只提供了一种实现：TextCellDraw，
+**5.ICellDraw(接口)，用于处理单元格绘制逻辑，目前只提供了一种实现：TextCellDraw，
 该实现主要目的是作为一种绘制Demo，建议根据自己的需求实现自定义IDraw**
 
 #### SurfaceTable中独有的方法
@@ -100,7 +100,7 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 无需添加任何混淆规则，可直接混淆
 
 #### *License*
-TableLite is released under the Apache 2.0 license.
+TableLiteKotlin is released under the Apache 2.0 license.
 ```
 Copyright 2019 wanggaowan.
 
