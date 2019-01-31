@@ -15,7 +15,8 @@ import com.keqiang.table.kotlin.util.Utils
  *
  * create by 汪高皖 on 2019/1/19 17:13
  */
-class SurfaceTableRender<T : Cell>(table: ITable<T>, private var mHolder: SurfaceHolder?) : TableRender<T>(table), SurfaceHolder.Callback {
+class SurfaceTableRender<T : Cell>(table: ITable<T>, private var mHolder: SurfaceHolder?) :
+    TableRender<T>(table), SurfaceHolder.Callback {
     /**
      * 判断Surface是否准备好，当为`true`时才可绘制内容
      */
@@ -103,10 +104,11 @@ class SurfaceTableRender<T : Cell>(table: ITable<T>, private var mHolder: Surfac
         val rows = mTable.tableData.rows
         val columns = mTable.tableData.columns
         if (!mDrawEnable
-                || rowIndex < 0
-                || rowIndex >= rows.size
-                || columnIndex < 0
-                || columnIndex >= columns.size) {
+            || rowIndex < 0
+            || rowIndex >= rows.size
+            || columnIndex < 0
+            || columnIndex >= columns.size
+        ) {
             return
         }
 
@@ -116,7 +118,8 @@ class SurfaceTableRender<T : Cell>(table: ITable<T>, private var mHolder: Surfac
 
         val actualRowHeight = Utils.getActualRowHeight(row, 0, row.cells.size, mTable.tableConfig)
         val column = columns[columnIndex]
-        val actualColumnWidth = Utils.getActualColumnWidth(column, 0, column.cells.size, mTable.tableConfig)
+        val actualColumnWidth =
+            Utils.getActualColumnWidth(column, 0, column.cells.size, mTable.tableConfig)
         if (actualRowHeight != row.height || actualColumnWidth != column.width) {
             row.height = actualRowHeight
             column.width = actualColumnWidth
@@ -140,9 +143,10 @@ class SurfaceTableRender<T : Cell>(table: ITable<T>, private var mHolder: Surfac
         val screenWidth = mTable.showRect.width()
         val screenHeight = mTable.showRect.height()
         if (drawRect.left >= screenWidth
-                || drawRect.right <= 0
-                || drawRect.top >= screenHeight
-                || drawRect.bottom <= 0) {
+            || drawRect.right <= 0
+            || drawRect.top >= screenHeight
+            || drawRect.bottom <= 0
+        ) {
             return
         }
 

@@ -32,9 +32,9 @@ import com.keqiang.table.kotlin.util.AsyncExecutor
  */
 class Table<T : Cell>
 @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyle: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
 ) : View(context, attrs, defStyle), ITable<T> {
 
     override val viewContext: Context
@@ -110,6 +110,9 @@ class Table<T : Cell>
      */
     private var mTableRender: TableRender<T> = TableRender(this)
 
+    /**
+     * 界面绘制
+     */
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         mTableRender.draw(canvas)

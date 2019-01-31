@@ -13,7 +13,10 @@ package com.keqiang.table.kotlin.model
  *
  * Created by Tony Patino on 6/20/16.
  */
-class ObjectPool<T : ObjectPool.Poolable> private constructor(private var desiredCapacity: Int, private val modelObject: T) {
+class ObjectPool<T : ObjectPool.Poolable> private constructor(
+    private var desiredCapacity: Int,
+    private val modelObject: T
+) {
     /**
      * Returns the id of the given pool instance.
      *
@@ -188,7 +191,7 @@ class ObjectPool<T : ObjectPool.Poolable> private constructor(private var desire
         abstract fun recycle()
 
         companion object {
-            var NO_OWNER = -1
+            var NO_OWNER: Int = -1
         }
     }
 

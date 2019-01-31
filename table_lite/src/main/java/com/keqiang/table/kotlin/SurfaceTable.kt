@@ -37,9 +37,9 @@ import com.keqiang.table.kotlin.util.Logger
  */
 class SurfaceTable<T : Cell>
 @JvmOverloads constructor(
-        context: Context, attrs:
-        AttributeSet? = null,
-        defStyle: Int = 0
+    context: Context, attrs:
+    AttributeSet? = null,
+    defStyle: Int = 0
 ) : FrameLayout(context, attrs, defStyle), ITable<T> {
 
     override val viewContext: Context
@@ -137,7 +137,10 @@ class SurfaceTable<T : Cell>
 
     init {
         mSurfaceView = SurfaceView(context)
-        val layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        val layoutParams = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         mSurfaceView.layoutParams = layoutParams
         mSurfaceView.setZOrderOnTop(true)
         mSurfaceView.holder.setFormat(PixelFormat.TRANSLUCENT)
@@ -192,7 +195,10 @@ class SurfaceTable<T : Cell>
             surfaceView = mSurfaceViewMap!!.get(mOrientation)
             if (surfaceView == null) {
                 surfaceView = SurfaceView(context)
-                val layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                val layoutParams = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
                 surfaceView.layoutParams = layoutParams
                 surfaceView.setZOrderOnTop(true)
                 surfaceView.holder.setFormat(PixelFormat.TRANSLUCENT)

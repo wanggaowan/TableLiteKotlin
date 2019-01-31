@@ -38,12 +38,12 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     /**
      * 表格实际大小是可显示区域大小的几倍时才开启快速滑动,范围[1,∞)
      */
-    var enableFlingRate = 1.5f
+    var enableFlingRate: Float = 1.5f
 
     /**
      * 快速滑动速率,数值越大，滑动越快
      */
-    var flingRate = 1f
+    var flingRate: Float = 1f
 
     /**
      * 快速滑动时是否X轴和Y轴都进行滑动
@@ -58,13 +58,13 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     /**
      * 需要高亮显示的行
      */
-    var highLightRowIndex = TableConfig.INVALID_VALUE
+    var highLightRowIndex: Int = TableConfig.INVALID_VALUE
         private set
 
     /**
      * 需要高亮显示的列
      */
-    var highLightColumnIndex = TableConfig.INVALID_VALUE
+    var highLightColumnIndex: Int = TableConfig.INVALID_VALUE
         private set
 
     /**
@@ -161,16 +161,19 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 val highLightRowIndex: Int
                 val highLightColumnIndex: Int
 
-                highLightRowIndex = if (mClickColumnIndex != 0 || !tableConfig.isHighLightSelectColumn
-                        || mClickRowIndex == 0 && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.COLUMN)) {
-                    TableConfig.INVALID_VALUE
-                } else {
-                    // 点击第一列内容表示行需要高亮，记录高亮行位置
-                    mClickRowIndex
-                }
+                highLightRowIndex =
+                        if (mClickColumnIndex != 0 || !tableConfig.isHighLightSelectColumn
+                            || mClickRowIndex == 0 && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.COLUMN)
+                        ) {
+                            TableConfig.INVALID_VALUE
+                        } else {
+                            // 点击第一列内容表示行需要高亮，记录高亮行位置
+                            mClickRowIndex
+                        }
 
                 highLightColumnIndex = if (mClickRowIndex != 0 || !tableConfig.isHighLightSelectRow
-                        || mClickColumnIndex == 0 && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.ROW)) {
+                    || mClickColumnIndex == 0 && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.ROW)
+                ) {
                     TableConfig.INVALID_VALUE
                 } else {
                     // 点击第一行内容表示列需要高亮，记录高亮列位置
@@ -195,7 +198,12 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
             dragChangeSize(0f, 0f, true)
         }
 
-        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        override fun onScroll(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
             val dispose = dragChangeSize(distanceX, distanceY, false)
             if (dispose) {
                 return true
@@ -219,21 +227,39 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
             }
         }
 
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
             val showRect = mTable.showRect
             val actualSizeRect = mTable.actualSizeRect
-            if (showRect.width() * enableFlingRate >= actualSizeRect.width() && showRect.height() * enableFlingRate >= actualSizeRect.height()) {
+            if (showRect.width() * enableFlingRate >= actualSizeRect.width()
+                && showRect.height() * enableFlingRate >= actualSizeRect.height()
+            ) {
                 // 只有表格宽且表格高度有显示区域两倍大小时才可快速滑动
                 return false
             }
 
             //根据滑动速率 设置Scroller final值,然后使用属性动画计算
-            if (Math.abs(velocityX) > mMinimumFlingVelocity || Math.abs(velocityY) > mMinimumFlingVelocity) {
+            if (Math.abs(velocityX) > mMinimumFlingVelocity
+                || Math.abs(velocityY) > mMinimumFlingVelocity
+            ) {
                 mScroller.finalX = 0
                 mScroller.finalY = 0
                 mTempScrollX = scrollX
                 mTempScrollY = scrollY
-                mScroller.fling(0, 0, velocityX.toInt(), velocityY.toInt(), -50000, 50000, -50000, 50000)
+                mScroller.fling(
+                    0,
+                    0,
+                    velocityX.toInt(),
+                    velocityY.toInt(),
+                    -50000,
+                    50000,
+                    -50000,
+                    50000
+                )
                 mFling = true
                 startFilingAnim(flingXY)
             }
@@ -279,7 +305,9 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 }
             }
 
-            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(false)
+            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(
+                false
+            )
         }
         return false
     }
@@ -290,8 +318,10 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_MOVE -> if (mLongPressDone) {
-                val dispose = dragChangeSize(longPressX - event.x,
-                        longPressY - event.y, false)
+                val dispose = dragChangeSize(
+                    longPressX - event.x,
+                    longPressY - event.y, false
+                )
                 longPressX = event.x
                 longPressY = event.y
                 return dispose
@@ -365,8 +395,10 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
         val scrollY = Math.abs(mScroller.finalY)
 
         when {
-            doubleWay -> mEndPoint.set((mScroller.finalX * flingRate).toInt(),
-                    (mScroller.finalY * flingRate).toInt())
+            doubleWay -> mEndPoint.set(
+                (mScroller.finalX * flingRate).toInt(),
+                (mScroller.finalY * flingRate).toInt()
+            )
 
             scrollX > scrollY -> {
                 val showRect = mTable.showRect
@@ -429,31 +461,46 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
      *
      * @param mustNotifyViewChange 当点击了第一行或第一列单元格但宽高未发生改变时是否强制刷新界面
      */
-    private fun dragChangeSize(distanceX: Float, distanceY: Float, mustNotifyViewChange: Boolean): Boolean {
+    private fun dragChangeSize(
+        distanceX: Float,
+        distanceY: Float,
+        mustNotifyViewChange: Boolean
+    ): Boolean {
         val tableConfig = mTable.tableConfig
         val dragChangeSizeRowIndex: Int
         val dragChangeSizeColumnIndex: Int
 
-        dragChangeSizeRowIndex = if (mClickColumnIndex != 0 || tableConfig.columnDragChangeWidthType == DragChangeSizeType.NONE
-                || mClickRowIndex == 0 && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.COLUMN)) {
-            TableConfig.INVALID_VALUE
-        } else {
-            // 点击第一列内容表示行需要高亮，记录高亮行位置
-            mClickRowIndex
-        }
+        dragChangeSizeRowIndex =
+                if (mClickColumnIndex != 0
+                    || tableConfig.columnDragChangeWidthType == DragChangeSizeType.NONE
+                    || mClickRowIndex == 0
+                    && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE
+                            || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.COLUMN)
+                ) {
+                    TableConfig.INVALID_VALUE
+                } else {
+                    // 点击第一列内容表示行需要高亮，记录高亮行位置
+                    mClickRowIndex
+                }
 
-        dragChangeSizeColumnIndex = if (mClickRowIndex != 0 || tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE
-                || mClickColumnIndex == 0 && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.ROW)) {
-            TableConfig.INVALID_VALUE
-        } else {
-            // 点击第一行内容表示列需要高亮，记录高亮列位置
-            mClickColumnIndex
-        }
+        dragChangeSizeColumnIndex =
+                if (mClickRowIndex != 0
+                    || tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE
+                    || mClickColumnIndex == 0
+                    && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE
+                            || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.ROW)
+                ) {
+                    TableConfig.INVALID_VALUE
+                } else {
+                    // 点击第一行内容表示列需要高亮，记录高亮列位置
+                    mClickColumnIndex
+                }
 
         if (dragChangeSizeRowIndex != TableConfig.INVALID_VALUE || dragChangeSizeColumnIndex != TableConfig.INVALID_VALUE) {
             if (dragChangeSizeRowIndex == 0 && dragChangeSizeColumnIndex == 0) {
                 if (!mLongPressDone && tableConfig.rowDragChangeHeightType == DragChangeSizeType.LONG_PRESS
-                        && tableConfig.columnDragChangeWidthType == DragChangeSizeType.LONG_PRESS) {
+                    && tableConfig.columnDragChangeWidthType == DragChangeSizeType.LONG_PRESS
+                ) {
                     return false
                 }
 

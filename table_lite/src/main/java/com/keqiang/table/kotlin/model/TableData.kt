@@ -67,13 +67,15 @@ class TableData<T : Cell>(private val table: ITable<T>) {
 
             for (i in 0 until totalRow) {
                 val row = mRows[i]
-                val actualRowHeight = Utils.getActualRowHeight(row, 0, row.cells.size, table.tableConfig)
+                val actualRowHeight =
+                    Utils.getActualRowHeight(row, 0, row.cells.size, table.tableConfig)
                 row.height = actualRowHeight
             }
 
             for (i in 0 until totalColumn) {
                 val column = mColumns[i]
-                val actualColumnWidth = Utils.getActualColumnWidth(column, 0, column.cells.size, table.tableConfig)
+                val actualColumnWidth =
+                    Utils.getActualColumnWidth(column, 0, column.cells.size, table.tableConfig)
                 column.width = actualColumnWidth
             }
 
@@ -107,19 +109,30 @@ class TableData<T : Cell>(private val table: ITable<T>) {
 
             for (i in position until position + addRowCount) {
                 val row = mRows[i]
-                val actualRowHeight = Utils.getActualRowHeight(row, 0, row.cells.size, table.tableConfig)
+                val actualRowHeight =
+                    Utils.getActualRowHeight(row, 0, row.cells.size, table.tableConfig)
                 row.height = actualRowHeight
             }
 
             for (i in mColumns.indices) {
                 val column = mColumns[i]
                 if (column.width != TableConfig.INVALID_VALUE) {
-                    val actualColumnWidth = Utils.getActualColumnWidth(column, position, position + addRowCount, table.tableConfig)
+                    val actualColumnWidth = Utils.getActualColumnWidth(
+                        column,
+                        position,
+                        position + addRowCount,
+                        table.tableConfig
+                    )
                     if (actualColumnWidth > column.width) {
                         column.width = actualColumnWidth
                     }
                 } else {
-                    val actualColumnWidth = Utils.getActualColumnWidth(column, position, position + addRowCount, table.tableConfig)
+                    val actualColumnWidth = Utils.getActualColumnWidth(
+                        column,
+                        position,
+                        position + addRowCount,
+                        table.tableConfig
+                    )
                     column.width = actualColumnWidth
                 }
             }
@@ -155,19 +168,30 @@ class TableData<T : Cell>(private val table: ITable<T>) {
 
             for (i in position until position + addColumnCount) {
                 val column = mColumns[i]
-                val actualColumnWidth = Utils.getActualColumnWidth(column, 0, column.cells.size, table.tableConfig)
+                val actualColumnWidth =
+                    Utils.getActualColumnWidth(column, 0, column.cells.size, table.tableConfig)
                 column.width = actualColumnWidth
             }
 
             for (i in mRows.indices) {
                 val row = mRows[i]
                 if (row.height != TableConfig.INVALID_VALUE) {
-                    val actualRowHeight = Utils.getActualRowHeight(row, position, position + addColumnCount, table.tableConfig)
+                    val actualRowHeight = Utils.getActualRowHeight(
+                        row,
+                        position,
+                        position + addColumnCount,
+                        table.tableConfig
+                    )
                     if (actualRowHeight > row.height) {
                         row.height = actualRowHeight
                     }
                 } else {
-                    val actualRowHeight = Utils.getActualRowHeight(row, position, position + addColumnCount, table.tableConfig)
+                    val actualRowHeight = Utils.getActualRowHeight(
+                        row,
+                        position,
+                        position + addColumnCount,
+                        table.tableConfig
+                    )
                     row.height = actualRowHeight
                 }
             }
@@ -209,7 +233,8 @@ class TableData<T : Cell>(private val table: ITable<T>) {
             // 重新统计所有列宽
             for (i in 0 until totalColumn) {
                 val column = mColumns[i]
-                val actualColumnWidth = Utils.getActualColumnWidth(column, 0, column.cells.size, table.tableConfig)
+                val actualColumnWidth =
+                    Utils.getActualColumnWidth(column, 0, column.cells.size, table.tableConfig)
                 column.width = actualColumnWidth
             }
             table.asyncReDraw()
@@ -248,7 +273,8 @@ class TableData<T : Cell>(private val table: ITable<T>) {
             // 重新统计所有列宽
             for (i in 0 until totalColumn) {
                 val column = mColumns[i]
-                val actualColumnWidth = Utils.getActualColumnWidth(column, 0, column.cells.size, table.tableConfig)
+                val actualColumnWidth =
+                    Utils.getActualColumnWidth(column, 0, column.cells.size, table.tableConfig)
                 column.width = actualColumnWidth
             }
             table.asyncReDraw()
@@ -289,7 +315,8 @@ class TableData<T : Cell>(private val table: ITable<T>) {
             // 重新统计所有行高
             for (i in 0 until totalRow) {
                 val row = mRows[i]
-                val actualRowHeight = Utils.getActualRowHeight(row, 0, row.cells.size, table.tableConfig)
+                val actualRowHeight =
+                    Utils.getActualRowHeight(row, 0, row.cells.size, table.tableConfig)
                 row.height = actualRowHeight
             }
             table.asyncReDraw()
@@ -328,7 +355,8 @@ class TableData<T : Cell>(private val table: ITable<T>) {
             // 重新统计所有行高
             for (i in 0 until totalRow) {
                 val row = mRows[i]
-                val actualRowHeight = Utils.getActualRowHeight(row, 0, row.cells.size, table.tableConfig)
+                val actualRowHeight =
+                    Utils.getActualRowHeight(row, 0, row.cells.size, table.tableConfig)
                 row.height = actualRowHeight
             }
             table.asyncReDraw()
@@ -389,7 +417,12 @@ class TableData<T : Cell>(private val table: ITable<T>) {
      * @param totalRow       总行数
      * @param totalColumn    总列数
      */
-    private fun mapCellDataByRow(insertPosition: Int, rowStart: Int, totalRow: Int, totalColumn: Int) {
+    private fun mapCellDataByRow(
+        insertPosition: Int,
+        rowStart: Int,
+        totalRow: Int,
+        totalColumn: Int
+    ) {
         val cellFactory = table.cellFactory ?: return
 
         var position = insertPosition
@@ -422,7 +455,12 @@ class TableData<T : Cell>(private val table: ITable<T>) {
      * @param totalRow       总行数
      * @param totalColumn    总列数
      */
-    private fun mapCellDataByColumn(insertPosition: Int, columnStart: Int, totalColumn: Int, totalRow: Int) {
+    private fun mapCellDataByColumn(
+        insertPosition: Int,
+        columnStart: Int,
+        totalColumn: Int,
+        totalRow: Int
+    ) {
         val cellFactory = table.cellFactory ?: return
 
         var position = insertPosition

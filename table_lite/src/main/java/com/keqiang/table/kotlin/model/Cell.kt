@@ -9,9 +9,9 @@ import com.keqiang.table.kotlin.TableConfig
  */
 open class Cell
 @JvmOverloads constructor(
-        data: Any?,
-        width: Int = TableConfig.INVALID_VALUE,
-        height: Int = TableConfig.INVALID_VALUE
+    data: Any?,
+    width: Int = TableConfig.INVALID_VALUE,
+    height: Int = TableConfig.INVALID_VALUE
 ) {
 
     /**
@@ -47,7 +47,7 @@ open class Cell
      *     ...
      * ```
      */
-    var width = TableConfig.INVALID_VALUE
+    var width: Int = TableConfig.INVALID_VALUE
 
     /**
      * 如果当前单元格所在行其它单元格高度大于此值，则以最大高度为主，如果希望当前行高度一致，则需设置整行单元格高度大小一致
@@ -83,7 +83,7 @@ open class Cell
      *
      * ```
      */
-    var height = TableConfig.INVALID_VALUE
+    var height: Int = TableConfig.INVALID_VALUE
     private var data: Any? = null
 
     init {

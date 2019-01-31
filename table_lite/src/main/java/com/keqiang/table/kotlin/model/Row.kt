@@ -12,7 +12,7 @@ class Row<T : Cell> {
     /**
      * 行高
      */
-    var height = TableConfig.INVALID_VALUE
+    var height: Int = TableConfig.INVALID_VALUE
 
     /**
      * 是否拖拽改变了行高

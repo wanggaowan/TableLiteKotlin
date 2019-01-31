@@ -1,5 +1,7 @@
 package com.keqiang.table.kotlin
 
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import com.keqiang.table.R
 import com.keqiang.table.kotlin.model.DragChangeSizeType
 import com.keqiang.table.kotlin.model.FirstRowColumnCellActionType
@@ -16,22 +18,22 @@ class TableConfig {
     /**
      * 最小行高
      */
-    var minRowHeight = 100
+    var minRowHeight: Int = 100
 
     /**
      * 最大行高，如果值为[.INVALID_VALUE]则无限制
      */
-    var maxRowHeight = INVALID_VALUE
+    var maxRowHeight: Int = INVALID_VALUE
 
     /**
      * 最小列宽
      */
-    var minColumnWidth = 200
+    var minColumnWidth: Int = 200
 
     /**
      * 最大列宽，如果值为[.INVALID_VALUE]则无限制
      */
-    var maxColumnWidth = INVALID_VALUE
+    var maxColumnWidth: Int = INVALID_VALUE
 
     /**
      * 全局行高，限制在[minRowHeight]和[maxRowHeight]之间,
@@ -65,7 +67,7 @@ class TableConfig {
      *     ...
      * ```
      */
-    var rowHeight = INVALID_VALUE
+    var rowHeight: Int = INVALID_VALUE
 
     /**
      * 全局列宽，限制在[minColumnWidth]和[maxColumnWidth]之间。
@@ -99,7 +101,7 @@ class TableConfig {
      *     ...
      * ```
      */
-    var columnWidth = INVALID_VALUE
+    var columnWidth: Int = INVALID_VALUE
 
     /**
      * 记录固定在顶部的行
@@ -138,86 +140,94 @@ class TableConfig {
     /**
      * 第一行第一列单元格点击时高亮处理方式,取值参考[FirstRowColumnCellActionType]
      */
-    var firstRowColumnCellHighLightType = FirstRowColumnCellActionType.BOTH
+    @FirstRowColumnCellActionType
+    var firstRowColumnCellHighLightType: Int = FirstRowColumnCellActionType.BOTH
 
     /**
      * 高亮时，覆盖在行或列上的颜色，如果不设置透明度，则内容将会被高亮颜色遮挡
      */
-    var highLightColor = 0x203A559B // 蓝色，透明度20
+    @ColorInt
+    var highLightColor: Int = 0x203A559B // 蓝色，透明度20
 
     /**
      * 拖拽行改变行高类型,如果不为[DragChangeSizeType.NONE],
      * 则默认固定第一列在左边，不管是否调用[.addColumnFix]，
      * 只有拖拽第一列单元格才会改变行高
      */
-    var rowDragChangeHeightType = DragChangeSizeType.LONG_PRESS
+    @DragChangeSizeType
+    var rowDragChangeHeightType: Int = DragChangeSizeType.LONG_PRESS
 
     /**
      * 拖拽列改变列宽类型,如果不为[DragChangeSizeType.NONE],
      * 则默认固定第一行在顶部，不管是否调用[.addRowFix]，
      * 只有拖拽第一行单元格才会改变列宽
      */
-    var columnDragChangeWidthType = DragChangeSizeType.LONG_PRESS
+    @DragChangeSizeType
+    var columnDragChangeWidthType: Int = DragChangeSizeType.LONG_PRESS
 
     /**
      * 第一行第一列单元格拖拽时列宽行高处理方式，取值参考[FirstRowColumnCellActionType]
      */
-    var firstRowColumnCellDragType = FirstRowColumnCellActionType.BOTH
+    @FirstRowColumnCellActionType
+    var firstRowColumnCellDragType: Int = FirstRowColumnCellActionType.BOTH
 
     /**
      * 拖拽改变行高列宽时是否绘制指示器
      */
-    var isEnableDragIndicator = true
+    var isEnableDragIndicator: Boolean = true
 
     /**
      * 行改变行高时的指示器图片资源Id，默认为[R.drawable.top_bottom],绘制位置垂直居中
      */
-    var rowDragIndicatorRes = R.drawable.top_bottom
+    @DrawableRes
+    var rowDragIndicatorRes: Int = R.drawable.top_bottom
 
     /**
      * 行改变行高时的指示器绘制大小，如果为[INVALID_VALUE]，则取[R.dimen.drag_image_size]
      */
-    var rowDragIndicatorSize = INVALID_VALUE
+    var rowDragIndicatorSize: Int = INVALID_VALUE
 
     /**
      * 行高指示器离单元格左侧的偏移值，如果为[INVALID_VALUE]，则取[R.dimen.row_drag_image_horizontal_offset]
      */
-    var rowDragIndicatorHorizontalOffset = INVALID_VALUE
+    var rowDragIndicatorHorizontalOffset: Int = INVALID_VALUE
 
     /**
      * 列改变列宽时的指示器图片资源Id，默认为[R.drawable.left_right]，绘制位置水平居中
      */
-    var columnDragIndicatorRes = R.drawable.left_right
+    @DrawableRes
+    var columnDragIndicatorRes: Int = R.drawable.left_right
 
     /**
      * 列改变列宽时的指示器绘制大小，如果为[INVALID_VALUE]，则取[R.dimen.drag_image_size]
      */
-    var columnDragIndicatorSize = INVALID_VALUE
+    var columnDragIndicatorSize: Int = INVALID_VALUE
 
     /**
      * 列宽指示器离单元格顶部的偏移值,如果为[INVALID_VALUE]，则取[R.dimen.column_drag_image_vertical_offset]
      */
-    var columnDragIndicatorVerticalOffset = INVALID_VALUE
+    var columnDragIndicatorVerticalOffset: Int = INVALID_VALUE
 
     /**
      * 第一行第一列同时改变列宽行高指示器图片资源Id，默认为[R.drawable.left_right]，绘制位置左上角
      */
-    var firstRowColumnDragIndicatorRes = R.drawable.diagonal_angle
+    @DrawableRes
+    var firstRowColumnDragIndicatorRes: Int = R.drawable.diagonal_angle
 
     /**
      * 第一行第一列同时改变列宽行高指示器大小，如果为[INVALID_VALUE]，则取[R.dimen.drag_image_size]
      */
-    var firstRowColumnDragIndicatorSize = INVALID_VALUE
+    var firstRowColumnDragIndicatorSize: Int = INVALID_VALUE
 
     /**
      * 第一行第一列同时改变列宽行高指示器离单元格顶部的偏移值,如果为[INVALID_VALUE]，则取[R.dimen.first_row_column_drag_image_vertical_offset]
      */
-    var firstRowColumnDragIndicatorVerticalOffset = INVALID_VALUE
+    var firstRowColumnDragIndicatorVerticalOffset: Int = INVALID_VALUE
 
     /**
      * 第一行第一列同时改变列宽行高指示器离单元格左边的偏移值,如果为[INVALID_VALUE]，则取[R.dimen.first_row_column_drag_image_horizontal_offset]
      */
-    var firstRowColumnDragIndicatorHorizontalOffset = INVALID_VALUE
+    var firstRowColumnDragIndicatorHorizontalOffset: Int = INVALID_VALUE
 
     /**
      * @return 固定在顶部的行下标，只读
@@ -352,6 +362,6 @@ class TableConfig {
         /**
          * 表示无效或没有设置过值
          */
-        const val INVALID_VALUE = -1
+        const val INVALID_VALUE: Int = -1
     }
 }

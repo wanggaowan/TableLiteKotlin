@@ -12,7 +12,7 @@ class Column<T : Cell> {
     /**
      * 列宽度
      */
-    var width = TableConfig.INVALID_VALUE
+    var width: Int = TableConfig.INVALID_VALUE
 
     /**
      * 是否拖拽改变了列宽

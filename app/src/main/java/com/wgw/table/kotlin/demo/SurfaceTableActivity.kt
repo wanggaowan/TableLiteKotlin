@@ -48,7 +48,13 @@ class SurfaceTableActivity : AppCompatActivity() {
         mTable.tableConfig.columnDragChangeWidthType = DragChangeSizeType.LONG_PRESS
         mTable.tableConfig.firstRowColumnCellDragType = FirstRowColumnCellActionType.BOTH
 
-        mTable.touchHelper.cellClickListener = { row, column -> Toast.makeText(this@SurfaceTableActivity, "row:$row,column:$column", Toast.LENGTH_SHORT).show() }
+        mTable.touchHelper.cellClickListener = { row, column ->
+            Toast.makeText(
+                this@SurfaceTableActivity,
+                "row:$row,column:$column",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
         mRowList = ArrayList()
         for (i in 0..49) {
@@ -145,11 +151,11 @@ class SurfaceTableActivity : AppCompatActivity() {
 
     fun testZero(view: View) {
         mAlertDialog = AlertDialog.Builder(this)
-                .setPositiveButton("取消") { _, _ -> mAlertDialog!!.dismiss() }
-                .setNegativeButton("确定") { _, _ -> mAlertDialog!!.dismiss() }
-                .setCancelable(false)
-                .setMessage("test")
-                .create()
+            .setPositiveButton("取消") { _, _ -> mAlertDialog!!.dismiss() }
+            .setNegativeButton("确定") { _, _ -> mAlertDialog!!.dismiss() }
+            .setCancelable(false)
+            .setMessage("test")
+            .create()
         mAlertDialog!!.show()
     }
 
@@ -185,9 +191,9 @@ class SurfaceTableActivity : AppCompatActivity() {
     }
 
     class AutoSizeCell @JvmOverloads constructor(
-            data: Any?,
-            width: Int = TableConfig.INVALID_VALUE,
-            height: Int = TableConfig.INVALID_VALUE
+        data: Any?,
+        width: Int = TableConfig.INVALID_VALUE,
+        height: Int = TableConfig.INVALID_VALUE
     ) : Cell(data, width, height) {
 
         override fun measureWidth(): Int {
@@ -207,9 +213,11 @@ class SurfaceTableActivity : AppCompatActivity() {
         override fun measureHeight(): Int {
             // 当前单元格高度和全局高度都设置为TableConfig.INVALID_VALUE 自适应高度，测量逻辑则根据IDraw中绘制逻辑选择不同的测量方案
             val text = getData<String>()
-            val staticLayout = StaticLayout(text, 0, text.length,
-                    textPaint, 200,
-                    Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false)
+            val staticLayout = StaticLayout(
+                text, 0, text.length,
+                textPaint, 200,
+                Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false
+            )
             return staticLayout.height + 60
         }
 

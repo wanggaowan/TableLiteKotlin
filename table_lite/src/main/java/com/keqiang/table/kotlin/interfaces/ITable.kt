@@ -12,6 +12,9 @@ import com.keqiang.table.kotlin.model.TableData
  * @author Created by 汪高皖 on 2019/1/18 0018 10:49
  */
 interface ITable<T : Cell> {
+    /**
+     * 上下文
+     */
     val viewContext: Context
 
     /**

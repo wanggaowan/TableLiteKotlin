@@ -19,7 +19,12 @@ object Utils {
      * @param tableConfig 表格配置
      * @return 从开始单元格到结束单元格(不包含结束单元格)中所有单元格最大高度
      */
-    fun getActualRowHeight(row: Row<*>, start: Int, end: Int, tableConfig: TableConfig): Int {
+    fun getActualRowHeight(
+        row: Row<*>,
+        start: Int,
+        end: Int,
+        tableConfig: TableConfig
+    ): Int {
         if (row.isDragChangeSize) {
             return row.height
         }
@@ -28,7 +33,7 @@ object Utils {
 
         val cells = row.cells
         for (i in start until end) {
-            val cell = cells!![i]
+            val cell = cells[i]
             val height = cell.height
             val rowHeight = tableConfig.rowHeight
             if (height == TableConfig.INVALID_VALUE && rowHeight == TableConfig.INVALID_VALUE) {
@@ -67,7 +72,12 @@ object Utils {
      * @param tableConfig 表格配置
      * @return 从开始单元格到结束单元格(不包含结束单元格)中所有单元格最大宽度
      */
-    fun getActualColumnWidth(column: Column<*>, start: Int, end: Int, tableConfig: TableConfig): Int {
+    fun getActualColumnWidth(
+        column: Column<*>,
+        start: Int,
+        end: Int,
+        tableConfig: TableConfig
+    ): Int {
         if (column.isDragChangeSize) {
             return column.width
         }
@@ -76,7 +86,7 @@ object Utils {
 
         val cells = column.cells
         for (i in start until end) {
-            val cell = cells!![i]
+            val cell = cells[i]
             val width = cell.width
             val columnWidth = tableConfig.columnWidth
             if (width == TableConfig.INVALID_VALUE && columnWidth == TableConfig.INVALID_VALUE) {

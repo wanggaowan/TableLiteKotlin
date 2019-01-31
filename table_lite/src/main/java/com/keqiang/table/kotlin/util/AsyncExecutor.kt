@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * @author 汪高皖
  */
 object AsyncExecutor {
+    @Suppress("MemberVisibilityCanBePrivate")
     val isShutdown: Boolean
         get() = mExecutor!!.isShutdown
 
@@ -18,23 +19,25 @@ object AsyncExecutor {
 
     init {
         mExecutor = ThreadPoolExecutor(
-                0,
-                MAX_CACHE_POOL_SIZE,
-                60L, TimeUnit.SECONDS,
-                SynchronousQueue(),
-                DefaultThreadFactory("table-lite"),
-                ThreadPoolExecutor.CallerRunsPolicy())
+            0,
+            MAX_CACHE_POOL_SIZE,
+            60L, TimeUnit.SECONDS,
+            SynchronousQueue(),
+            DefaultThreadFactory("table-lite"),
+            ThreadPoolExecutor.CallerRunsPolicy()
+        )
     }
 
     fun execute(runnable: Runnable) {
         if (isShutdown) {
             mExecutor = ThreadPoolExecutor(
-                    0,
-                    MAX_CACHE_POOL_SIZE,
-                    60L, TimeUnit.SECONDS,
-                    SynchronousQueue(),
-                    DefaultThreadFactory("table-lite"),
-                    ThreadPoolExecutor.CallerRunsPolicy())
+                0,
+                MAX_CACHE_POOL_SIZE,
+                60L, TimeUnit.SECONDS,
+                SynchronousQueue(),
+                DefaultThreadFactory("table-lite"),
+                ThreadPoolExecutor.CallerRunsPolicy()
+            )
         }
 
         mExecutor!!.execute(runnable)
@@ -65,9 +68,11 @@ object AsyncExecutor {
         }
 
         override fun newThread(r: Runnable): Thread {
-            val t = Thread(group, r,
-                    namePrefix + threadNumber.getAndIncrement(),
-                    0)
+            val t = Thread(
+                group, r,
+                namePrefix + threadNumber.getAndIncrement(),
+                0
+            )
             if (t.isDaemon)
                 t.isDaemon = false
             if (t.priority != Thread.NORM_PRIORITY)

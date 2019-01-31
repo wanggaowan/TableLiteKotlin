@@ -40,14 +40,21 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
      */
     abstract fun getConfig(row: Int, column: Int): DrawConfig
 
-    override fun onCellDraw(table: ITable<T>, canvas: Canvas, cell: T, drawRect: Rect, row: Int, column: Int) {
+    override fun onCellDraw(
+        table: ITable<T>,
+        canvas: Canvas,
+        cell: T,
+        drawRect: Rect,
+        row: Int,
+        column: Int
+    ) {
         if (drawRect.width() <= 0 || drawRect.height() <= 0) {
             return
         }
 
         val drawConfig = getConfig(row, column)
         drawBackground(canvas, drawRect, drawConfig)
-        drawText(canvas, cell, drawRect, row, column, drawConfig)
+        drawText(canvas, cell, drawRect, drawConfig)
         drawBorder(table, canvas, drawRect, drawConfig, row, column)
     }
 
@@ -62,10 +69,12 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
         if (drawConfig.isDrawBackground) {
             fillBackgroundPaint(drawConfig)
             if (drawConfig.borderSize > 0) {
-                TEMP_RECT.set(drawRect.left + drawConfig.borderSize / 2,
-                        drawRect.top + drawConfig.borderSize / 2,
-                        drawRect.right - drawConfig.borderSize / 2,
-                        drawRect.bottom - drawConfig.borderSize / 2)
+                TEMP_RECT.set(
+                    drawRect.left + drawConfig.borderSize / 2,
+                    drawRect.top + drawConfig.borderSize / 2,
+                    drawRect.right - drawConfig.borderSize / 2,
+                    drawRect.bottom - drawConfig.borderSize / 2
+                )
                 canvas.save()
                 canvas.clipRect(TEMP_RECT)
                 canvas.drawRect(drawRect, PAINT)
@@ -79,7 +88,14 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
     /**
      * 绘制边框
      */
-    private fun drawBorder(table: ITable<*>, canvas: Canvas, drawRect: Rect, drawConfig: DrawConfig?, row: Int, column: Int) {
+    private fun drawBorder(
+        table: ITable<*>,
+        canvas: Canvas,
+        drawRect: Rect,
+        drawConfig: DrawConfig?,
+        row: Int,
+        column: Int
+    ) {
         if (drawConfig == null) {
             return
         }
@@ -89,8 +105,10 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
             val tableData = table.tableData
             val left = if (column == 0) drawRect.left + drawConfig.borderSize / 2 else drawRect.left
             val top = if (row == 0) drawRect.top + drawConfig.borderSize / 2 else drawRect.top
-            val right = if (column == tableData.totalColumn - 1) drawRect.right - drawConfig.borderSize / 2 else drawRect.right
-            val bottom = if (row == tableData.totalRow - 1) drawRect.bottom - drawConfig.borderSize / 2 else drawRect.bottom
+            val right =
+                if (column == tableData.totalColumn - 1) drawRect.right - drawConfig.borderSize / 2 else drawRect.right
+            val bottom =
+                if (row == tableData.totalRow - 1) drawRect.bottom - drawConfig.borderSize / 2 else drawRect.bottom
             TEMP_RECT.set(left, top, right, bottom)
             canvas.drawRect(TEMP_RECT, PAINT)
         }
@@ -99,7 +117,12 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
     /**
      * 绘制文本
      */
-    private fun drawText(canvas: Canvas, cell: Cell, drawRect: Rect, row: Int, column: Int, drawConfig: DrawConfig?) {
+    private fun drawText(
+        canvas: Canvas,
+        cell: Cell,
+        drawRect: Rect,
+        drawConfig: DrawConfig?
+    ) {
         val text = cell.getData<Any>() as? CharSequence ?: return
 
         if (TextUtils.isEmpty(text.toString())) {
@@ -110,15 +133,20 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
             fillTextPaint(null)
             PAINT.textAlign = Paint.Align.LEFT
 
-            val staticLayout: StaticLayout = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                StaticLayout.Builder.obtain(text, 0, text.length,
-                        PAINT, drawRect.width())
+            val staticLayout: StaticLayout =
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    StaticLayout.Builder.obtain(
+                        text, 0, text.length,
+                        PAINT, drawRect.width()
+                    )
                         .build()
-            } else {
-                StaticLayout(text, 0, text.length,
+                } else {
+                    StaticLayout(
+                        text, 0, text.length,
                         PAINT, drawRect.width(),
-                        Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false)
-            }
+                        Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false
+                    )
+                }
 
             canvas.save()
             canvas.translate(drawRect.left.toFloat(), drawRect.right.toFloat())
@@ -133,14 +161,18 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
         val staticLayout: StaticLayout
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             highVersion = true
-            staticLayout = StaticLayout.Builder.obtain(text, 0, text.length,
-                    PAINT, drawRect.width())
-                    .setMaxLines(if (drawConfig.isMultiLine) Integer.MAX_VALUE else 1)
-                    .build()
+            staticLayout = StaticLayout.Builder.obtain(
+                text, 0, text.length,
+                PAINT, drawRect.width()
+            )
+                .setMaxLines(if (drawConfig.isMultiLine) Integer.MAX_VALUE else 1)
+                .build()
         } else {
-            staticLayout = StaticLayout(text, 0, text.length,
-                    PAINT, drawRect.width(),
-                    Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false)
+            staticLayout = StaticLayout(
+                text, 0, text.length,
+                PAINT, drawRect.width(),
+                Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false
+            )
         }
 
         val textHeight = staticLayout.height.toFloat()
@@ -181,16 +213,22 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
         }
 
         if (drawConfig.borderSize == 0
-                && drawConfig.paddingLeft == 0
-                && drawConfig.paddingRight == 0
-                && drawConfig.paddingTop == 0
-                && drawConfig.paddingBottom == 0) {
+            && drawConfig.paddingLeft == 0
+            && drawConfig.paddingRight == 0
+            && drawConfig.paddingTop == 0
+            && drawConfig.paddingBottom == 0
+        ) {
 
             var cut = false
             if (!highVersion && !drawConfig.isMultiLine) {
                 val singleTextHeight = textHeight
                 // 保证单行
-                TEMP_RECT.set(drawRect.left, y.toInt(), drawRect.right, (y + singleTextHeight).toInt())
+                TEMP_RECT.set(
+                    drawRect.left,
+                    y.toInt(),
+                    drawRect.right,
+                    (y + singleTextHeight).toInt()
+                )
                 if (TEMP_RECT.width() <= 0 || TEMP_RECT.height() <= 0) {
                     return
                 }
@@ -219,15 +257,19 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
                     bottom = (y + singleTextHeight).toInt()
                 }
 
-                TEMP_RECT.set(drawRect.left + drawConfig.paddingLeft + drawConfig.borderSize / 2,
-                        top,
-                        drawRect.right - drawConfig.paddingRight - drawConfig.borderSize / 2,
-                        bottom)
+                TEMP_RECT.set(
+                    drawRect.left + drawConfig.paddingLeft + drawConfig.borderSize / 2,
+                    top,
+                    drawRect.right - drawConfig.paddingRight - drawConfig.borderSize / 2,
+                    bottom
+                )
             } else {
-                TEMP_RECT.set(drawRect.left + drawConfig.paddingLeft + drawConfig.borderSize / 2,
-                        drawRect.top + drawConfig.paddingTop + drawConfig.borderSize / 2,
-                        drawRect.right - drawConfig.paddingRight - drawConfig.borderSize / 2,
-                        drawRect.bottom - drawConfig.paddingBottom - drawConfig.borderSize / 2)
+                TEMP_RECT.set(
+                    drawRect.left + drawConfig.paddingLeft + drawConfig.borderSize / 2,
+                    drawRect.top + drawConfig.paddingTop + drawConfig.borderSize / 2,
+                    drawRect.right - drawConfig.paddingRight - drawConfig.borderSize / 2,
+                    drawRect.bottom - drawConfig.paddingBottom - drawConfig.borderSize / 2
+                )
             }
 
             if (TEMP_RECT.width() > 0 && TEMP_RECT.height() > 0) {
@@ -303,7 +345,7 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
         /**
          * 文字绘制位置
          */
-        var gravity = Gravity.LEFT
+        var gravity: Int = Gravity.LEFT
 
         /**
          * 左边距

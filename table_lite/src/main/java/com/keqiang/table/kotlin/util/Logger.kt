@@ -8,10 +8,11 @@ import com.keqiang.table.BuildConfig
 /**
  * 日志工具
  */
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 object Logger {
     private var isLogEnable = BuildConfig.DEBUG
 
-    private var tag = Logger::class.java!!.getSimpleName()
+    private var tag = Logger::class.java.simpleName
 
     fun debug(isEnable: Boolean) {
         debug(tag, isEnable)

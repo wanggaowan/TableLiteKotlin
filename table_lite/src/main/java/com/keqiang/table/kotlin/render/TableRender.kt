@@ -16,6 +16,7 @@ import java.util.*
  * <br></br>create by 汪高皖 on 2019/1/19 15:00
  */
 open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
+
     /**
      * 表格实际大小
      */
@@ -59,7 +60,7 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
     /**
      * 固定行列数据升序排序
      */
-    protected var mFixAscComparator = { o1: Int, o2: Int ->
+    protected var mFixAscComparator: (Int, Int) -> Int = { o1: Int, o2: Int ->
         when {
             o1 < o2 -> -1
             o1 == o2 -> 0
@@ -70,7 +71,7 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
     /**
      * 固定行列数据降序排序
      */
-    protected var mFixDescComparator = { o1: Int, o2: Int ->
+    protected var mFixDescComparator: (Int, Int) -> Int = { o1: Int, o2: Int ->
         when {
             o1 < o2 -> 1
             o1 == o2 -> 0
@@ -133,12 +134,19 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
         }
 
         val fixLeftColumnWidth = drawColumnFixLeft(canvas, fixTopRowHeight, fixBottomRowHeight)
-        val fixRightColumnWidth = drawColumnFixRight(canvas, fixTopRowHeight, fixBottomRowHeight, fixLeftColumnWidth)
+        val fixRightColumnWidth =
+            drawColumnFixRight(canvas, fixTopRowHeight, fixBottomRowHeight, fixLeftColumnWidth)
         if (fixLeftColumnWidth + fixRightColumnWidth >= showRect.width()) {
             return true
         }
 
-        drawNoneFixCell(canvas, fixLeftColumnWidth, fixTopRowHeight, fixRightColumnWidth, fixBottomRowHeight)
+        drawNoneFixCell(
+            canvas,
+            fixLeftColumnWidth,
+            fixTopRowHeight,
+            fixRightColumnWidth,
+            fixBottomRowHeight
+        )
         return true
     }
 
@@ -167,9 +175,20 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
     /**
      * 绘制无需固定的单元格
      */
-    protected fun drawNoneFixCell(canvas: Canvas, fixLeftColumnWidth: Int, fixTopRowHeight: Int, fixRightColumnWidth: Int, fixBottomRowHeight: Int) {
+    protected fun drawNoneFixCell(
+        canvas: Canvas,
+        fixLeftColumnWidth: Int,
+        fixTopRowHeight: Int,
+        fixRightColumnWidth: Int,
+        fixBottomRowHeight: Int
+    ) {
         val showRect = mTable.showRect
-        mClipRect.set(fixLeftColumnWidth, fixTopRowHeight, showRect.width() - fixRightColumnWidth, showRect.height() - fixBottomRowHeight)
+        mClipRect.set(
+            fixLeftColumnWidth,
+            fixTopRowHeight,
+            showRect.width() - fixRightColumnWidth,
+            showRect.height() - fixBottomRowHeight
+        )
 
         canvas.save()
         canvas.clipRect(mClipRect)
@@ -230,8 +249,9 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
     protected fun drawRowFixTop(canvas: Canvas): Int {
         val tableConfig = mTable.tableConfig
         if (tableConfig.rowTopFix.isEmpty()
-                && !tableConfig.isHighLightSelectColumn
-                && tableConfig.columnDragChangeWidthType == DragChangeSizeType.NONE) {
+            && !tableConfig.isHighLightSelectColumn
+            && tableConfig.columnDragChangeWidthType == DragChangeSizeType.NONE
+        ) {
             return 0
         }
 
@@ -270,14 +290,28 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
             val row = rows[tempRowTopFix]
             val bottom = fixTopRowHeight + row.height
 
-            val fixLeftColumnWidth = drawColumnFixLeftForFixRow(canvas, tempRowTopFix, fixTopRowHeight, bottom)
-            val fixRightColumnWidth = drawColumnFixRightForFixRow(canvas, tempRowTopFix, fixTopRowHeight, bottom, fixLeftColumnWidth)
+            val fixLeftColumnWidth =
+                drawColumnFixLeftForFixRow(canvas, tempRowTopFix, fixTopRowHeight, bottom)
+            val fixRightColumnWidth = drawColumnFixRightForFixRow(
+                canvas,
+                tempRowTopFix,
+                fixTopRowHeight,
+                bottom,
+                fixLeftColumnWidth
+            )
             if (fixLeftColumnWidth + fixRightColumnWidth >= showWidth) {
                 fixTopRowHeight += row.height
                 continue
             }
 
-            drawNoneFixCellForFixRow(canvas, tempRowTopFix, fixTopRowHeight, fixTopRowHeight + row.height, fixLeftColumnWidth, fixRightColumnWidth)
+            drawNoneFixCellForFixRow(
+                canvas,
+                tempRowTopFix,
+                fixTopRowHeight,
+                fixTopRowHeight + row.height,
+                fixLeftColumnWidth,
+                fixRightColumnWidth
+            )
             fixTopRowHeight += row.height
         }
 
@@ -334,14 +368,28 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
                 canvas.clipRect(mClipRect)
             }
 
-            val fixLeftColumnWidth = drawColumnFixLeftForFixRow(canvas, tempRowBottomFix, top, bottom)
-            val fixRightColumnWidth = drawColumnFixRightForFixRow(canvas, tempRowBottomFix, top, bottom, fixLeftColumnWidth)
+            val fixLeftColumnWidth =
+                drawColumnFixLeftForFixRow(canvas, tempRowBottomFix, top, bottom)
+            val fixRightColumnWidth = drawColumnFixRightForFixRow(
+                canvas,
+                tempRowBottomFix,
+                top,
+                bottom,
+                fixLeftColumnWidth
+            )
             if (fixLeftColumnWidth + fixRightColumnWidth >= showWidth) {
                 fixBottomRowHeight += row.height
                 continue
             }
 
-            drawNoneFixCellForFixRow(canvas, tempRowBottomFix, top, bottom, fixLeftColumnWidth, fixRightColumnWidth)
+            drawNoneFixCellForFixRow(
+                canvas,
+                tempRowBottomFix,
+                top,
+                bottom,
+                fixLeftColumnWidth,
+                fixRightColumnWidth
+            )
             fixBottomRowHeight += row.height
 
             if (clipRow) {
@@ -357,14 +405,19 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
      *
      * @return 固定在左边的列总宽度
      */
-    protected fun drawColumnFixLeft(canvas: Canvas, fixTopRowHeight: Int, fixBottomRowHeight: Int): Int {
+    protected fun drawColumnFixLeft(
+        canvas: Canvas,
+        fixTopRowHeight: Int,
+        fixBottomRowHeight: Int
+    ): Int {
         val showHeight = mTable.showRect.height()
         val tableConfig = mTable.tableConfig
 
         if (fixTopRowHeight + fixBottomRowHeight >= showHeight
-                || (tableConfig.columnLeftFix.isEmpty()
-                        && !tableConfig.isHighLightSelectRow
-                        && tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE)) {
+            || (tableConfig.columnLeftFix.isEmpty()
+                    && !tableConfig.isHighLightSelectRow
+                    && tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE)
+        ) {
             return 0
         }
 
@@ -404,7 +457,12 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
             val column = columns[tempColumnLeftFix]
             val right = fixLeftColumnWidth + column.width
 
-            mClipRect.set(fixLeftColumnWidth, fixTopRowHeight, right, showHeight - fixBottomRowHeight)
+            mClipRect.set(
+                fixLeftColumnWidth,
+                fixTopRowHeight,
+                right,
+                showHeight - fixBottomRowHeight
+            )
             canvas.save()
             canvas.clipRect(mClipRect)
 
@@ -426,7 +484,14 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
                 canvas.clipRect(mClipRect)
 
                 mShowCells.add(ShowCell.getInstance(j, tempColumnLeftFix, mClipRect, false, true))
-                iCellDraw?.onCellDraw(mTable, canvas, row.cells[tempColumnLeftFix], mClipRect, j, tempColumnLeftFix)
+                iCellDraw?.onCellDraw(
+                    mTable,
+                    canvas,
+                    row.cells[tempColumnLeftFix],
+                    mClipRect,
+                    j,
+                    tempColumnLeftFix
+                )
                 drawMask(canvas, mClipRect, j, tempColumnLeftFix)
 
                 canvas.restore()
@@ -445,7 +510,12 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
      *
      * @return 固定在右边的列的总宽度
      */
-    protected fun drawColumnFixRight(canvas: Canvas, fixTopRowHeight: Int, fixBottomRowHeight: Int, fixLeftColumnWidth: Int): Int {
+    protected fun drawColumnFixRight(
+        canvas: Canvas,
+        fixTopRowHeight: Int,
+        fixBottomRowHeight: Int,
+        fixLeftColumnWidth: Int
+    ): Int {
         val showWidth = mTable.showRect.width()
         val showHeight = mTable.showRect.height()
         val actualWidth = mTable.actualSizeRect.width()
@@ -506,7 +576,14 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
                 canvas.clipRect(mClipRect)
 
                 mShowCells.add(ShowCell.getInstance(j, tempColumnRightFix, mClipRect, false, true))
-                iCellDraw?.onCellDraw(mTable, canvas, row.cells[tempColumnRightFix], mClipRect, j, tempColumnRightFix)
+                iCellDraw?.onCellDraw(
+                    mTable,
+                    canvas,
+                    row.cells[tempColumnRightFix],
+                    mClipRect,
+                    j,
+                    tempColumnRightFix
+                )
                 drawMask(canvas, mClipRect, j, tempColumnRightFix)
 
                 canvas.restore()
@@ -528,11 +605,17 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
      * @param bottom 固定行底部位置
      * @return 固定在左边的列总宽度
      */
-    protected fun drawColumnFixLeftForFixRow(canvas: Canvas, fixRow: Int, top: Int, bottom: Int): Int {
+    protected fun drawColumnFixLeftForFixRow(
+        canvas: Canvas,
+        fixRow: Int,
+        top: Int,
+        bottom: Int
+    ): Int {
         val tableConfig = mTable.tableConfig
         if (tableConfig.columnLeftFix.isEmpty()
-                && !tableConfig.isHighLightSelectRow
-                && tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE) {
+            && !tableConfig.isHighLightSelectRow
+            && tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE
+        ) {
             return 0
         }
 
@@ -576,7 +659,14 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
             canvas.clipRect(mClipRect)
 
             mShowCells.add(ShowCell.getInstance(fixRow, tempColumnLeftFix, mClipRect, true, true))
-            iCellDraw?.onCellDraw(mTable, canvas, column.cells[fixRow], mClipRect, fixRow, tempColumnLeftFix)
+            iCellDraw?.onCellDraw(
+                mTable,
+                canvas,
+                column.cells[fixRow],
+                mClipRect,
+                fixRow,
+                tempColumnLeftFix
+            )
             drawMask(canvas, mClipRect, fixRow, tempColumnLeftFix)
 
             canvas.restore()
@@ -595,7 +685,13 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
      * @param fixLeftColumnWidth 固定在左边的列的宽度
      * @return 固定在右边的列总宽度
      */
-    protected fun drawColumnFixRightForFixRow(canvas: Canvas, fixRow: Int, top: Int, bottom: Int, fixLeftColumnWidth: Int): Int {
+    protected fun drawColumnFixRightForFixRow(
+        canvas: Canvas,
+        fixRow: Int,
+        top: Int,
+        bottom: Int,
+        fixLeftColumnWidth: Int
+    ): Int {
         val showWidth = mTable.showRect.width()
         val actualWidth = mTable.actualSizeRect.width()
         val tableConfig = mTable.tableConfig
@@ -637,7 +733,14 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
             canvas.clipRect(mClipRect)
 
             mShowCells.add(ShowCell.getInstance(fixRow, tempColumnRightFix, mClipRect, true, true))
-            iCellDraw?.onCellDraw(mTable, canvas, column.cells[fixRow], mClipRect, fixRow, tempColumnRightFix)
+            iCellDraw?.onCellDraw(
+                mTable,
+                canvas,
+                column.cells[fixRow],
+                mClipRect,
+                fixRow,
+                tempColumnRightFix
+            )
             drawMask(canvas, mClipRect, fixRow, tempColumnRightFix)
 
             canvas.restore()
@@ -656,7 +759,14 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
      * @param fixLeftColumnWidth  固定在左边的列的宽度
      * @param fixRightColumnWidth 固定在右边的列的宽度
      */
-    protected fun drawNoneFixCellForFixRow(canvas: Canvas, fixRow: Int, top: Int, bottom: Int, fixLeftColumnWidth: Int, fixRightColumnWidth: Int) {
+    protected fun drawNoneFixCellForFixRow(
+        canvas: Canvas,
+        fixRow: Int,
+        top: Int,
+        bottom: Int,
+        fixLeftColumnWidth: Int,
+        fixRightColumnWidth: Int
+    ) {
         val showWidth = mTable.showRect.width()
         mClipRect.set(fixLeftColumnWidth, top, showWidth - fixRightColumnWidth, bottom)
 
@@ -730,20 +840,26 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
             if (touchHelper.isDragChangeSize) {
                 val resources = mTable.viewContext.resources
                 if (mRowColumnDragBitmap == null) {
-                    mRowColumnDragBitmap = BitmapFactory.decodeResource(resources, tableConfig.firstRowColumnDragIndicatorRes)
+                    mRowColumnDragBitmap = BitmapFactory.decodeResource(
+                        resources,
+                        tableConfig.firstRowColumnDragIndicatorRes
+                    )
                 }
-                val imageSize = if (tableConfig.firstRowColumnDragIndicatorSize == TableConfig.INVALID_VALUE)
-                    resources.getDimensionPixelSize(R.dimen.drag_image_size)
-                else
-                    tableConfig.firstRowColumnDragIndicatorSize
-                val left = drawRect.left - if (tableConfig.firstRowColumnDragIndicatorHorizontalOffset == TableConfig.INVALID_VALUE)
-                    resources.getDimensionPixelSize(R.dimen.first_row_column_drag_image_horizontal_offset)
-                else
-                    tableConfig.firstRowColumnDragIndicatorHorizontalOffset
-                val top = drawRect.top - if (tableConfig.firstRowColumnDragIndicatorVerticalOffset == TableConfig.INVALID_VALUE)
-                    resources.getDimensionPixelSize(R.dimen.first_row_column_drag_image_vertical_offset)
-                else
-                    tableConfig.firstRowColumnDragIndicatorVerticalOffset
+                val imageSize =
+                    if (tableConfig.firstRowColumnDragIndicatorSize == TableConfig.INVALID_VALUE)
+                        resources.getDimensionPixelSize(R.dimen.drag_image_size)
+                    else
+                        tableConfig.firstRowColumnDragIndicatorSize
+                val left =
+                    drawRect.left - if (tableConfig.firstRowColumnDragIndicatorHorizontalOffset == TableConfig.INVALID_VALUE)
+                        resources.getDimensionPixelSize(R.dimen.first_row_column_drag_image_horizontal_offset)
+                    else
+                        tableConfig.firstRowColumnDragIndicatorHorizontalOffset
+                val top =
+                    drawRect.top - if (tableConfig.firstRowColumnDragIndicatorVerticalOffset == TableConfig.INVALID_VALUE)
+                        resources.getDimensionPixelSize(R.dimen.first_row_column_drag_image_vertical_offset)
+                    else
+                        tableConfig.firstRowColumnDragIndicatorVerticalOffset
                 drawRect.set(left, top, left + imageSize, top + imageSize)
                 if (!drawRect.isEmpty) {
                     canvas.drawBitmap(mRowColumnDragBitmap!!, null, drawRect, mMaskPaint)
@@ -752,8 +868,20 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
         } else if (column == touchHelper.highLightColumnIndex) {
             mMaskPaint!!.style = Paint.Style.FILL
             mMaskPaint!!.alpha = 255
-            canvas.drawLine(drawRect.left.toFloat(), drawRect.top.toFloat(), drawRect.left.toFloat(), drawRect.bottom.toFloat(), mMaskPaint!!)
-            canvas.drawLine(drawRect.right.toFloat(), drawRect.top.toFloat(), drawRect.right.toFloat(), drawRect.bottom.toFloat(), mMaskPaint!!)
+            canvas.drawLine(
+                drawRect.left.toFloat(),
+                drawRect.top.toFloat(),
+                drawRect.left.toFloat(),
+                drawRect.bottom.toFloat(),
+                mMaskPaint!!
+            )
+            canvas.drawLine(
+                drawRect.right.toFloat(),
+                drawRect.top.toFloat(),
+                drawRect.right.toFloat(),
+                drawRect.bottom.toFloat(),
+                mMaskPaint!!
+            )
 
             mMaskPaint!!.alpha = alpha
             drawRect.inset(1, 0)
@@ -767,17 +895,22 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
             if (row == 0 && touchHelper.isDragChangeSize) {
                 val resources = mTable.viewContext.resources
                 if (mColumnDragBitmap == null) {
-                    mColumnDragBitmap = BitmapFactory.decodeResource(resources, tableConfig.columnDragIndicatorRes)
+                    mColumnDragBitmap = BitmapFactory.decodeResource(
+                        resources,
+                        tableConfig.columnDragIndicatorRes
+                    )
                 }
-                val imageSize = if (tableConfig.rowDragIndicatorSize == TableConfig.INVALID_VALUE)
-                    resources.getDimensionPixelSize(R.dimen.drag_image_size)
-                else
-                    tableConfig.rowDragIndicatorSize
+                val imageSize =
+                    if (tableConfig.columnDragIndicatorSize == TableConfig.INVALID_VALUE)
+                        resources.getDimensionPixelSize(R.dimen.drag_image_size)
+                    else
+                        tableConfig.rowDragIndicatorSize
                 val left = drawRect.left + drawRect.width() / 2 - imageSize / 2
-                val top = drawRect.top - if (tableConfig.columnDragIndicatorVerticalOffset == TableConfig.INVALID_VALUE)
-                    resources.getDimensionPixelSize(R.dimen.column_drag_image_vertical_offset)
-                else
-                    tableConfig.columnDragIndicatorVerticalOffset
+                val top =
+                    drawRect.top - if (tableConfig.columnDragIndicatorVerticalOffset == TableConfig.INVALID_VALUE)
+                        resources.getDimensionPixelSize(R.dimen.column_drag_image_vertical_offset)
+                    else
+                        tableConfig.columnDragIndicatorVerticalOffset
                 drawRect.set(left, top, left + imageSize, top + imageSize)
                 if (!drawRect.isEmpty) {
                     canvas.drawBitmap(mColumnDragBitmap!!, null, drawRect, mMaskPaint)
@@ -786,8 +919,20 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
         } else if (row == touchHelper.highLightRowIndex) {
             mMaskPaint!!.style = Paint.Style.FILL
             mMaskPaint!!.alpha = 255
-            canvas.drawLine(drawRect.left.toFloat(), drawRect.top.toFloat(), drawRect.right.toFloat(), drawRect.top.toFloat(), mMaskPaint!!)
-            canvas.drawLine(drawRect.left.toFloat(), drawRect.bottom.toFloat(), drawRect.right.toFloat(), drawRect.bottom.toFloat(), mMaskPaint!!)
+            canvas.drawLine(
+                drawRect.left.toFloat(),
+                drawRect.top.toFloat(),
+                drawRect.right.toFloat(),
+                drawRect.top.toFloat(),
+                mMaskPaint!!
+            )
+            canvas.drawLine(
+                drawRect.left.toFloat(),
+                drawRect.bottom.toFloat(),
+                drawRect.right.toFloat(),
+                drawRect.bottom.toFloat(),
+                mMaskPaint!!
+            )
 
             mMaskPaint!!.alpha = alpha
             drawRect.inset(0, 1)
@@ -801,17 +946,19 @@ open class TableRender<T : Cell>(protected var mTable: ITable<T>) {
             if (column == 0 && touchHelper.isDragChangeSize) {
                 val resources = mTable.viewContext.resources
                 if (mRowDragBitmap == null) {
-                    mRowDragBitmap = BitmapFactory.decodeResource(resources, tableConfig.rowDragIndicatorRes)
+                    mRowDragBitmap =
+                            BitmapFactory.decodeResource(resources, tableConfig.rowDragIndicatorRes)
                 }
                 val imageSize = if (tableConfig.rowDragIndicatorSize == TableConfig.INVALID_VALUE)
                     resources.getDimensionPixelSize(R.dimen.drag_image_size)
                 else
                     tableConfig.rowDragIndicatorSize
                 val top = drawRect.top + drawRect.height() / 2 - imageSize / 2
-                val left = drawRect.left - if (tableConfig.rowDragIndicatorHorizontalOffset == TableConfig.INVALID_VALUE)
-                    resources.getDimensionPixelSize(R.dimen.row_drag_image_horizontal_offset)
-                else
-                    tableConfig.rowDragIndicatorHorizontalOffset
+                val left =
+                    drawRect.left - if (tableConfig.rowDragIndicatorHorizontalOffset == TableConfig.INVALID_VALUE)
+                        resources.getDimensionPixelSize(R.dimen.row_drag_image_horizontal_offset)
+                    else
+                        tableConfig.rowDragIndicatorHorizontalOffset
                 drawRect.set(left, top, left + imageSize, top + imageSize)
                 if (!drawRect.isEmpty) {
                     canvas.drawBitmap(mRowDragBitmap!!, null, drawRect, mMaskPaint)

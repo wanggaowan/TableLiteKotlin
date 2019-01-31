@@ -74,7 +74,13 @@ class ShowCell private constructor() : ObjectPool.Poolable() {
         /**
          * 获取实例
          */
-        fun getInstance(row: Int, column: Int, drawRect: Rect, fixRow: Boolean, fixColumn: Boolean): ShowCell {
+        fun getInstance(
+            row: Int,
+            column: Int,
+            drawRect: Rect,
+            fixRow: Boolean,
+            fixColumn: Boolean
+        ): ShowCell {
             val result = Inner.pool.get()
             result.row = row
             result.column = column
