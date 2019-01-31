@@ -23,7 +23,7 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 2. 增加依赖
    ```groovy
    dependencies {
-   	implementation 'com.github.wanggaowan:TableLiteKotlin:1.0'
+   	implementation 'com.github.wanggaowan:TableLiteKotlin:1.1'
    }
    ```
 

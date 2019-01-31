@@ -1,4 +1,6 @@
 ### 更新日志
+- v1.1
+  > 修复TableConfig 配置mColumnDragIndicatorSize无效Bug
 - v1.0
   > 快速生成表格，支持行列固定，高亮选中行列，拖拽改变列宽行高等
 
