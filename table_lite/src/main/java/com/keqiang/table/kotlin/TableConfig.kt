@@ -124,16 +124,12 @@ class TableConfig {
     private val mColumnRightFix: MutableSet<Int>
 
     /**
-     * 是否高亮显示选中行，如果为`true`,
-     * 则默认固定第一列在左边，不管是否调用[addColumnFix]，
-     * 只有点击第一列内容才会高亮显示整行
+     * 是否高亮显示选中行，当且仅当点击第一列内容才会高亮显示整行
      */
     var isHighLightSelectRow: Boolean = false
 
     /**
-     * 是否高亮显示选中列，如果为`true`,
-     * 则默认固定第一行在顶部，不管是否调用[.addColumnFix]，
-     * 只有点击第一行内容才会高亮显示整列
+     * 是否高亮显示选中列，当且仅当点击第一行内容才会高亮显示整列
      */
     var isHighLightSelectColumn: Boolean = false
 
@@ -150,17 +146,13 @@ class TableConfig {
     var highLightColor: Int = 0x203A559B // 蓝色，透明度20
 
     /**
-     * 拖拽行改变行高类型,如果不为[DragChangeSizeType.NONE],
-     * 则默认固定第一列在左边，不管是否调用[.addColumnFix]，
-     * 只有拖拽第一列单元格才会改变行高
+     * 拖拽行改变行高类型,当且仅当拖拽第一列单元格才会改变行高
      */
     @DragChangeSizeType
     var rowDragChangeHeightType: Int = DragChangeSizeType.LONG_PRESS
 
     /**
-     * 拖拽列改变列宽类型,如果不为[DragChangeSizeType.NONE],
-     * 则默认固定第一行在顶部，不管是否调用[.addRowFix]，
-     * 只有拖拽第一行单元格才会改变列宽
+     * 拖拽列改变列宽类型,当且仅当拖拽第一行单元格才会改变列宽
      */
     @DragChangeSizeType
     var columnDragChangeWidthType: Int = DragChangeSizeType.LONG_PRESS
@@ -170,6 +162,11 @@ class TableConfig {
      */
     @FirstRowColumnCellActionType
     var firstRowColumnCellDragType: Int = FirstRowColumnCellActionType.BOTH
+
+    /**
+     * 拖拽改变列宽或行高后是否需要恢复之前高亮行或列，如果为`false`，则拖拽结束后取消高亮内容,默认值为`true`
+     */
+    var needRecoveryHighLightOnDragChangeSizeEnded: Boolean = true
 
     /**
      * 拖拽改变行高列宽时是否绘制指示器

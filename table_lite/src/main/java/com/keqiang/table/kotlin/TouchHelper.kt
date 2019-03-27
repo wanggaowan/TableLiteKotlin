@@ -22,19 +22,6 @@ import com.keqiang.table.kotlin.model.FirstRowColumnCellActionType
  * @author Created by 汪高皖 on 2019/1/17 0017 09:53
  */
 class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
-
-    /**
-     * 水平滑动时滑出部分离控件左边的距离
-     */
-    var scrollX: Int = 0
-        private set
-
-    /**
-     * 垂直滑动时滑出部分离控件顶部的距离
-     */
-    var scrollY: Int = 0
-        private set
-
     /**
      * 表格实际大小是可显示区域大小的几倍时才开启快速滑动,范围[1,∞)
      */
@@ -68,9 +55,59 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
         private set
 
     /**
+     * 拖拽需要高亮显示的行
+     */
+    var dragRowIndex: Int = TableConfig.INVALID_VALUE
+        private set
+
+    /**
+     * 拖拽需要高亮显示的列
+     */
+    var dragColumnIndex: Int = TableConfig.INVALID_VALUE
+        private set
+
+    /**
+     * 水平滑动时滑出部分离控件左边的距离
+     */
+    internal var scrollX: Int = 0
+        private set
+
+    /**
+     * 垂直滑动时滑出部分离控件顶部的距离
+     */
+    internal var scrollY: Int = 0
+        private set
+
+    /**
+     * @return 需要绘制蒙层的行Index
+     */
+    internal fun getNeedMaskRowIndex(): Int {
+        return if (highLightRowIndex == TableConfig.INVALID_VALUE && dragRowIndex == TableConfig.INVALID_VALUE) {
+            TableConfig.INVALID_VALUE
+        } else if (dragRowIndex != TableConfig.INVALID_VALUE) {
+            dragRowIndex
+        } else {
+            highLightRowIndex
+        }
+    }
+
+    /**
+     * @return 需要绘制蒙层的列Index
+     */
+    internal fun getNeedMaskColumnIndex(): Int {
+        return if (highLightColumnIndex == TableConfig.INVALID_VALUE && dragColumnIndex == TableConfig.INVALID_VALUE) {
+            TableConfig.INVALID_VALUE
+        } else if (dragColumnIndex != TableConfig.INVALID_VALUE) {
+            dragColumnIndex
+        } else {
+            highLightColumnIndex
+        }
+    }
+
+    /**
      * `true`触发拖拽改变列宽或行高的动作
      */
-    var isDragChangeSize: Boolean = false
+    internal var isDragChangeSize: Boolean = false
         private set
 
     /**
@@ -162,17 +199,21 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 val highLightColumnIndex: Int
 
                 highLightRowIndex =
-                        if (mClickColumnIndex != 0 || !tableConfig.isHighLightSelectColumn
-                            || mClickRowIndex == 0 && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.COLUMN)
-                        ) {
-                            TableConfig.INVALID_VALUE
-                        } else {
-                            // 点击第一列内容表示行需要高亮，记录高亮行位置
-                            mClickRowIndex
-                        }
+                    if (mClickColumnIndex != 0 || !tableConfig.isHighLightSelectColumn
+                        || mClickRowIndex == 0
+                        && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE
+                                || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.COLUMN)
+                    ) {
+                        TableConfig.INVALID_VALUE
+                    } else {
+                        // 点击第一列内容表示行需要高亮，记录高亮行位置
+                        mClickRowIndex
+                    }
 
                 highLightColumnIndex = if (mClickRowIndex != 0 || !tableConfig.isHighLightSelectRow
-                    || mClickColumnIndex == 0 && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.ROW)
+                    || mClickColumnIndex == 0
+                    && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE
+                            || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.ROW)
                 ) {
                     TableConfig.INVALID_VALUE
                 } else {
@@ -330,9 +371,15 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
                 if (isDragChangeSize) {
                     isDragChangeSize = false
+                    if (!mTable.tableConfig.needRecoveryHighLightOnDragChangeSizeEnded) {
+                        highLightRowIndex = TableConfig.INVALID_VALUE
+                        highLightColumnIndex = TableConfig.INVALID_VALUE
+                    }
                     notifyViewChanged()
                 }
                 mLongPressDone = false
+                dragRowIndex = TableConfig.INVALID_VALUE
+                dragColumnIndex = TableConfig.INVALID_VALUE
             }
         }
         return mGestureDetector.onTouchEvent(event)
@@ -471,30 +518,30 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
         val dragChangeSizeColumnIndex: Int
 
         dragChangeSizeRowIndex =
-                if (mClickColumnIndex != 0
-                    || tableConfig.columnDragChangeWidthType == DragChangeSizeType.NONE
-                    || mClickRowIndex == 0
-                    && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE
-                            || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.COLUMN)
-                ) {
-                    TableConfig.INVALID_VALUE
-                } else {
-                    // 点击第一列内容表示行需要高亮，记录高亮行位置
-                    mClickRowIndex
-                }
+            if (mClickColumnIndex != 0
+                || tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE
+                || mClickRowIndex == 0
+                && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE
+                        || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.COLUMN)
+            ) {
+                TableConfig.INVALID_VALUE
+            } else {
+                // 点击第一列内容表示行需要高亮，记录高亮行位置
+                mClickRowIndex
+            }
 
         dragChangeSizeColumnIndex =
-                if (mClickRowIndex != 0
-                    || tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE
-                    || mClickColumnIndex == 0
-                    && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE
-                            || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.ROW)
-                ) {
-                    TableConfig.INVALID_VALUE
-                } else {
-                    // 点击第一行内容表示列需要高亮，记录高亮列位置
-                    mClickColumnIndex
-                }
+            if (mClickRowIndex != 0
+                || tableConfig.columnDragChangeWidthType == DragChangeSizeType.NONE
+                || mClickColumnIndex == 0
+                && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE
+                        || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.ROW)
+            ) {
+                TableConfig.INVALID_VALUE
+            } else {
+                // 点击第一行内容表示列需要高亮，记录高亮列位置
+                mClickColumnIndex
+            }
 
         if (dragChangeSizeRowIndex != TableConfig.INVALID_VALUE || dragChangeSizeColumnIndex != TableConfig.INVALID_VALUE) {
             if (dragChangeSizeRowIndex == 0 && dragChangeSizeColumnIndex == 0) {
@@ -505,8 +552,8 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 }
 
                 isDragChangeSize = true
-                highLightRowIndex = dragChangeSizeRowIndex
-                highLightColumnIndex = dragChangeSizeColumnIndex
+                dragRowIndex = dragChangeSizeRowIndex
+                dragColumnIndex = dragChangeSizeColumnIndex
                 val tableData = mTable.tableData
                 val row = tableData.rows[0]
                 val column = tableData.columns[0]
@@ -539,8 +586,8 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 }
 
                 isDragChangeSize = true
-                highLightRowIndex = dragChangeSizeRowIndex
-                highLightColumnIndex = TableConfig.INVALID_VALUE
+                dragRowIndex = dragChangeSizeRowIndex
+                dragColumnIndex = TableConfig.INVALID_VALUE
                 val tableData = mTable.tableData
                 val row = tableData.rows[dragChangeSizeRowIndex]
                 var height = (row.height - distanceY).toInt()
@@ -563,8 +610,8 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 }
 
                 isDragChangeSize = true
-                highLightRowIndex = TableConfig.INVALID_VALUE
-                highLightColumnIndex = dragChangeSizeColumnIndex
+                dragRowIndex = TableConfig.INVALID_VALUE
+                dragColumnIndex = dragChangeSizeColumnIndex
                 val tableData = mTable.tableData
                 val column = tableData.columns[dragChangeSizeColumnIndex]
                 var width = (column.width - distanceX).toInt()

@@ -2,7 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.wanggaowan'
+apply plugin: 'org.jetbrains.dokka-android'
+group = 'com.github.wanggaowan'
 
 android {
     compileSdkVersion 28
@@ -10,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 2
-        versionName '1.1'
+        versionCode 3
+        versionName '1.2'
     }
 
     buildTypes {
@@ -29,9 +30,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.annotation:annotation:1.0.1'
+    implementation 'androidx.annotation:annotation:1.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
+
 repositories {
     mavenCentral()
+}
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+    sourceDirs = files('src/main/java/com/keqiang/table/kotlin')
 }

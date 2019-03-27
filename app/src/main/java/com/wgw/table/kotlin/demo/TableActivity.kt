@@ -28,25 +28,24 @@ class TableActivity : AppCompatActivity() {
         mTable = findViewById(R.id.table)
 
         //        mTable.getTableConfig().setColumnWidth(200);
-        mTable.tableConfig.rowHeight = 100
+//        mTable.tableConfig.rowHeight = 100
         mTable.tableConfig.addRowFix(0, FixGravity.TOP_ROW)
-        mTable.tableConfig.addRowFix(3, FixGravity.TOP_ROW)
-        mTable.tableConfig.addRowFix(5, FixGravity.TOP_ROW)
-
+//        mTable.tableConfig.addRowFix(3, FixGravity.TOP_ROW)
+//        mTable.tableConfig.addRowFix(5, FixGravity.TOP_ROW)
+//
         mTable.tableConfig.addColumnFix(0, FixGravity.LEFT_COLUMN)
-        mTable.tableConfig.addColumnFix(3, FixGravity.LEFT_COLUMN)
-        mTable.tableConfig.addColumnFix(5, FixGravity.LEFT_COLUMN)
+//        mTable.tableConfig.addColumnFix(3, FixGravity.LEFT_COLUMN)
+//        mTable.tableConfig.addColumnFix(5, FixGravity.LEFT_COLUMN)
 
-        mTable.tableConfig.addRowFix(0, FixGravity.TOP_ROW)
-        mTable.tableConfig.addColumnFix(0, FixGravity.LEFT_COLUMN)
         mTable.tableConfig.isHighLightSelectRow = true
         mTable.tableConfig.isHighLightSelectColumn = true
-        mTable.tableConfig.firstRowColumnCellHighLightType = FirstRowColumnCellActionType.ROW
+        mTable.tableConfig.firstRowColumnCellHighLightType = FirstRowColumnCellActionType.BOTH
 
         mTable.tableConfig.rowDragChangeHeightType = DragChangeSizeType.LONG_PRESS
         mTable.tableConfig.columnDragChangeWidthType = DragChangeSizeType.LONG_PRESS
-        mTable.tableConfig.firstRowColumnCellDragType = FirstRowColumnCellActionType.COLUMN
+        mTable.tableConfig.firstRowColumnCellDragType = FirstRowColumnCellActionType.BOTH
 
+//        mTable.tableConfig.needRecoveryHighLightOnDragChangeSizeEnded = false
 
         mTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         mTextPaint.textSize = 30f
@@ -138,14 +137,11 @@ class TableActivity : AppCompatActivity() {
             mDrawConfig.borderSize = 2
             mDrawConfig.borderColor = Color.GRAY
             mDrawConfig.gravity = Gravity.CENTER
+            mDrawConfig.backgroundColor = Color.LTGRAY
         }
 
         override fun getConfig(row: Int, column: Int): TextCellDraw.DrawConfig {
-            when (column) {
-                0 -> mDrawConfig.backgroundColor = Color.GREEN
-                1 -> mDrawConfig.backgroundColor = Color.BLUE
-                else -> mDrawConfig.backgroundColor = Color.YELLOW
-            }
+            mDrawConfig.isDrawBackground = row == 0 || column == 0
             return mDrawConfig
         }
     }

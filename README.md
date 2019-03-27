@@ -5,6 +5,7 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 提升性能和效率。
 * [项目github地址](https://github.com/wanggaowan/TableLiteKotlin)
 * [版本更新日志](/update.md/)
+* [demo APK](/app-debug.apk)
 
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![](https://jitpack.io/v/wanggaowan/TableLiteKotlin.svg)](https://jitpack.io/#wanggaowan/TableLiteKotlin)
@@ -13,17 +14,16 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 1. 添加 JitPack repository 到你的build文件
    ```groovy
     allprojects {
-    	repositories {
-    		...
-    		maven { url 'https://www.jitpack.io' }
-    	}
+        repositories {
+            maven { url 'https://www.jitpack.io' }
+        }
     }
    ```
 
 2. 增加依赖
    ```groovy
    dependencies {
-   	implementation 'com.github.wanggaowan:TableLiteKotlin:1.1'
+        implementation 'com.github.wanggaowan:TableLiteKotlin:1.2'
    }
    ```
 
@@ -43,13 +43,13 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
    ```
 #### 下面对Table和SurfaceTable中主要的类进行说明：
 **1.TableConfig(表格全局数据配置)，可配置项如下：**
- - 全局行高，最大最小行高。
- - 全局列宽，最大最小列宽。
- - 是否需要固定行(顶部或底部)，是否需要固定列(左边或右边)
- - 是否需要行选中高亮，列选中高亮以及高亮颜色(设置为true时自动固定第一列或第一行)
- - 是否需要拖拽改变行高或列宽(三种配置：NONE,不需要,CLICK，点击即可修改,LONG_PRESS，长按后修改)，
-  拖拽时方向指示器图标，指示器大小，是否绘制指示器(当需要拖拽改变行高或列宽设置为不是DragChangeSizeType.NONE
-  时自动固定第一列或第一行)
+  - 全局行高，最大最小行高。
+  - 全局列宽，最大最小列宽。
+  - 是否需要固定行(顶部或底部)，是否需要固定列(左边或右边)
+  - 是否需要行选中高亮，列选中高亮以及高亮颜色
+  - 是否需要拖拽改变行高或列宽(三种配置：NONE：不需要,CLICK：点击即可修改,LONG_PRESS：长按后修改)，
+   拖拽时方向指示器图标，指示器大小，是否绘制指示器
+  - 拖拽改变行高或列宽结束后是否需要恢复之前高亮内容
 
 **2.TableData(表格数据处理)，功能如下：**
  - 设置新数据
@@ -69,7 +69,7 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 模型转换成特定对象才可以使用。**
 
 **5.ICellDraw(接口)，用于处理单元格绘制逻辑，目前只提供了一种实现：TextCellDraw，
-该实现主要目的是作为一种绘制Demo，建议根据自己的需求实现自定义IDraw**
+该实现主要目的是作为一种绘制Demo，建议根据自己的需求实现自定义ICellDraw**
 
 #### SurfaceTable中独有的方法
 ```kotlin
