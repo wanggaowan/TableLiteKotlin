@@ -25,7 +25,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     /**
      * 表格实际大小是可显示区域大小的几倍时才开启快速滑动,范围[1,∞)
      */
-    var enableFlingRate: Float = 1.5f
+    var enableFlingRate: Float = 1.2f
 
     /**
      * 快速滑动速率,数值越大，滑动越快
@@ -82,9 +82,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
      * @return 需要绘制蒙层的行Index
      */
     internal fun getNeedMaskRowIndex(): Int {
-        return if (highLightRowIndex == TableConfig.INVALID_VALUE && dragRowIndex == TableConfig.INVALID_VALUE) {
-            TableConfig.INVALID_VALUE
-        } else if (dragRowIndex != TableConfig.INVALID_VALUE) {
+        return if (isDragChangeSize) {
             dragRowIndex
         } else {
             highLightRowIndex
@@ -95,9 +93,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
      * @return 需要绘制蒙层的列Index
      */
     internal fun getNeedMaskColumnIndex(): Int {
-        return if (highLightColumnIndex == TableConfig.INVALID_VALUE && dragColumnIndex == TableConfig.INVALID_VALUE) {
-            TableConfig.INVALID_VALUE
-        } else if (dragColumnIndex != TableConfig.INVALID_VALUE) {
+        return if (isDragChangeSize) {
             dragColumnIndex
         } else {
             highLightColumnIndex
@@ -337,7 +333,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
 
             MotionEvent.ACTION_MOVE -> {
                 var isDisallowIntercept = true
-                if (scrollY == 0 || scrollY >= mTable.actualSizeRect.height() - mTable.showRect.height()) {
+                if (!isDragChangeSize && (scrollY == 0 || scrollY >= mTable.actualSizeRect.height() - mTable.showRect.height())) {
                     isDisallowIntercept = false
                 }
                 parent.requestDisallowInterceptTouchEvent(isDisallowIntercept)
@@ -346,9 +342,8 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 }
             }
 
-            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(
-                false
-            )
+            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP ->
+                parent.requestDisallowInterceptTouchEvent(false)
         }
         return false
     }

@@ -837,7 +837,8 @@ open class TableRender<T : Cell>(protected val mTable: ITable<T>) {
         }
 
         val tableConfig = mTable.tableConfig
-        var highLightColor = tableConfig.highLightColor
+        var highLightColor =
+            if (touchHelper.isDragChangeSize) tableConfig.dragHighLightColor else tableConfig.highLightColor
         val alpha = Color.alpha(highLightColor)
         highLightColor -= alpha
         mMaskPaint!!.color = highLightColor

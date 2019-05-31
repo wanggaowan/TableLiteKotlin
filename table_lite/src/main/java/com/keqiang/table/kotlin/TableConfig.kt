@@ -21,7 +21,7 @@ class TableConfig {
     var minRowHeight: Int = 100
 
     /**
-     * 最大行高，如果值为[.INVALID_VALUE]则无限制
+     * 最大行高，如果值为[INVALID_VALUE]则无限制
      */
     var maxRowHeight: Int = INVALID_VALUE
 
@@ -31,7 +31,7 @@ class TableConfig {
     var minColumnWidth: Int = 200
 
     /**
-     * 最大列宽，如果值为[.INVALID_VALUE]则无限制
+     * 最大列宽，如果值为[INVALID_VALUE]则无限制
      */
     var maxColumnWidth: Int = INVALID_VALUE
 
@@ -143,7 +143,7 @@ class TableConfig {
      * 高亮时，覆盖在行或列上的颜色，如果不设置透明度，则内容将会被高亮颜色遮挡
      */
     @ColorInt
-    var highLightColor: Int = 0x203A559B // 蓝色，透明度20
+    var highLightColor: Int = 0x20438CFF // 蓝色，透明度20
 
     /**
      * 拖拽行改变行高类型,当且仅当拖拽第一列单元格才会改变行高
@@ -162,6 +162,12 @@ class TableConfig {
      */
     @FirstRowColumnCellActionType
     var firstRowColumnCellDragType: Int = FirstRowColumnCellActionType.BOTH
+
+    /**
+     * 拖拽改变行高或列宽时，覆盖在行或列上的颜色，如果不设置透明度，则内容将会被高亮颜色遮挡
+     */
+    @ColorInt
+    var dragHighLightColor: Int = 0x206BD98D // 绿色，透明度20
 
     /**
      * 拖拽改变列宽或行高后是否需要恢复之前高亮行或列，如果为`false`，则拖拽结束后取消高亮内容,默认值为`true`
