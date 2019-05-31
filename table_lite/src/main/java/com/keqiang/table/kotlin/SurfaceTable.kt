@@ -282,7 +282,7 @@ class SurfaceTable<T : Cell>
      * @param direction <0：手指滑动方向从上到下(显示内容逐渐移动到顶部)，>0：手指滑动方向从下到上(显示内容逐渐移动到底部)
      */
     override fun canScrollVertically(direction: Int): Boolean {
-        return if (direction < 0) {
+        return touchHelper.isDragChangeSize || if (direction < 0) {
             // 向顶部滑动
             touchHelper.scrollY > 0
         } else {
@@ -297,7 +297,7 @@ class SurfaceTable<T : Cell>
      * @param direction <0：手指滑动方向从左到右(显示内容逐渐移动到左边界)，>0：手指滑动方向从右到左(显示内容逐渐移动到右边界)
      */
     override fun canScrollHorizontally(direction: Int): Boolean {
-        return if (direction < 0) {
+        return touchHelper.isDragChangeSize || if (direction < 0) {
             // 向顶部滑动
             touchHelper.scrollX > 0
         } else {
