@@ -23,7 +23,7 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 2. 增加依赖
    ```groovy
    dependencies {
-        implementation 'com.github.wanggaowan:TableLiteKotlin:1.2'
+        implementation 'com.github.wanggaowan:TableLiteKotlin:1.3'
    }
    ```
 
@@ -47,7 +47,7 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
   - 全局列宽，最大最小列宽。
   - 是否需要固定行(顶部或底部)，是否需要固定列(左边或右边)
   - 是否需要行选中高亮，列选中高亮以及高亮颜色
-  - 是否需要拖拽改变行高或列宽(三种配置：NONE：不需要,CLICK：点击即可修改,LONG_PRESS：长按后修改)，
+  - 是否需要拖拽改变行高或列宽(三种配置：NONE：不需要,CLICK：点击即可修改,LONG_PRESS：长按后修改)以及拖拽时高亮颜色，
    拖拽时方向指示器图标，指示器大小，是否绘制指示器
   - 拖拽改变行高或列宽结束后是否需要恢复之前高亮内容
 
