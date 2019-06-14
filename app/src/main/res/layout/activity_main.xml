@@ -13,9 +13,9 @@
         android:layout_height="50dp"
         android:onClick="goTableActivity"/>
 
-    <Button
-        android:text="surfaceTable"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:onClick="goSurfaceTableActivity"/>
+    <!--<Button-->
+        <!--android:text="surfaceTable"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:onClick="goSurfaceTableActivity"/>-->
 </LinearLayout>

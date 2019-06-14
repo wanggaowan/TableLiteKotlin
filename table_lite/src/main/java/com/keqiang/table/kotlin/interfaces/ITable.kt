@@ -2,6 +2,7 @@ package com.keqiang.table.kotlin.interfaces
 
 import android.content.Context
 import android.graphics.Rect
+import android.view.View
 import com.keqiang.table.kotlin.TableConfig
 import com.keqiang.table.kotlin.TouchHelper
 import com.keqiang.table.kotlin.model.Cell
@@ -67,4 +68,14 @@ interface ITable<T : Cell> {
      * 通知同步重绘，必须在UI线程调用
      */
     fun syncReDraw()
+
+    /**
+     * Table绑定到Window与解绑监听
+     */
+    fun addOnAttachStateChangeListener(listener: View.OnAttachStateChangeListener)
+
+    /**
+     * 将事件发送到Table所在线程
+     */
+    fun post(action: Runnable): Boolean
 }

@@ -34,12 +34,6 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:background="@android:color/white"/>
-           
-    <com.keqiang.table.kotlin.SurfaceTable
-           android:id="@+id/tableSurface"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:background="@android:color/white"/>      
    ```
 #### 下面对Table和SurfaceTable中主要的类进行说明：
 **1.TableConfig(表格全局数据配置)，可配置项如下：**
@@ -71,30 +65,6 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
 **5.ICellDraw(接口)，用于处理单元格绘制逻辑，目前只提供了一种实现：TextCellDraw，
 该实现主要目的是作为一种绘制Demo，建议根据自己的需求实现自定义ICellDraw**
 
-#### SurfaceTable中独有的方法
-```kotlin
- /**
-  * 以异步方式局部刷新单元格
-  *
-  * @param row    需要刷新的单元格所在行
-  * @param column 需要刷新的单元格所在列
-  * @param data   新数据
-  */
-  fun asyncReDrawCell(row: Int, column: Int, data: Any) {
-     // 代码省略
-  }
- 
-  /**
-   * 以同步方式局部刷新单元格
-   *
-   * @param row    需要刷新的单元格所在行
-   * @param column 需要刷新的单元格所在列
-   * @param data   新数据
-   */
-  fun syncReDrawCell(row: Int, column: Int, data: Any) {
-      // 代码省略
-  }
-```
 
 #### Proguard
 无需添加任何混淆规则，可直接混淆
