@@ -1,8 +1,8 @@
 # TableLite Kotlin语言实现
-Android 轻量版Table组件，提供Table和SurfaceTable两种组件，
-SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现局部
-单元格刷新，不需要每次全局刷新，这对于表格中需要绘制网络照片来说可以极大的
-提升性能和效率。
+Android 轻量版Table组件。
+
+**说明**：SurfaceTable现不提供使用，如果需要使用，可自行下载源码并对外开放，目前SurfaceTable无法解决始终绘制在最顶层问题，这样对于多层（z轴）布局（比如刷新：SwipeRefreshLayout）下嵌套SurfaceTable，会导致刷新界面被SurfaceTable遮挡问题。如果需求没有多层（z轴）嵌套，则使用没有问题
+
 * [项目github地址](https://github.com/wanggaowan/TableLiteKotlin)
 * [版本更新日志](/update.md/)
 * [demo APK](/app-debug.apk)
@@ -35,7 +35,7 @@ SurfaceTable采用SurfaceView实现界面绘制，因此相比Table，可实现�
            android:layout_height="match_parent"
            android:background="@android:color/white"/>
    ```
-#### 下面对Table和SurfaceTable中主要的类进行说明：
+#### 下面对Table中主要的类进行说明：
 **1.TableConfig(表格全局数据配置)，可配置项如下：**
   - 全局行高，最大最小行高。
   - 全局列宽，最大最小列宽。
