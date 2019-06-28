@@ -26,7 +26,7 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
     /**
      * 获取文本的高度
      */
-    private val textHeight: Float
+    private val singleTextHeight: Float
         get() {
             val metrics = PAINT.fontMetrics
             return metrics.descent - metrics.ascent
@@ -149,7 +149,7 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
                 }
 
             canvas.save()
-            canvas.translate(drawRect.left.toFloat(), drawRect.right.toFloat())
+            canvas.translate(drawRect.left.toFloat(), drawRect.top.toFloat())
             staticLayout.draw(canvas)
             canvas.restore()
             return
@@ -221,7 +221,6 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
 
             var cut = false
             if (!highVersion && !drawConfig.isMultiLine) {
-                val singleTextHeight = textHeight
                 // 保证单行
                 TEMP_RECT.set(
                     drawRect.left,
@@ -252,7 +251,6 @@ abstract class TextCellDraw<T : Cell> : ICellDraw<T> {
                 }
 
                 var bottom = drawRect.bottom - drawConfig.paddingBottom - drawConfig.borderSize / 2
-                val singleTextHeight = textHeight
                 if (bottom > y + singleTextHeight) {
                     bottom = (y + singleTextHeight).toInt()
                 }

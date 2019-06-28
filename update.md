@@ -1,4 +1,10 @@
 ### 更新日志
+- v1.6
+  > * Table新增setNewData、clearData、setCellClickListener三个方法，
+ 当然你也可以通过获取TableData和TouchHelper实例来调用相关方法
+  > * TableConfig新增isBothHighLightRowAndColumn配置项，用于是否需要同时高亮选中的行和列
+  > * 修复TableConfig中isHighLightSelectRow和isHighLightSelectColumn两个配置项产生的效果刚好相反Bug（粗心了，坏笑）
+
 - v1.5
   > * 修复多线程数据同步问题
   > * 暂停SurfaceTable使用，关键问题未解决

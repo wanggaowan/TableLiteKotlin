@@ -38,11 +38,6 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     var flingXY: Boolean = false
 
     /**
-     * 单元格点击监听
-     */
-    var cellClickListener: CellClickListener? = null
-
-    /**
      * 需要高亮显示的行
      */
     var highLightRowIndex: Int = TableConfig.INVALID_VALUE
@@ -105,6 +100,11 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
      */
     internal var isDragChangeSize: Boolean = false
         private set
+
+    /**
+     * 单元格点击监听
+     */
+    private var mCellClickListener: CellClickListener? = null
 
     /**
      * 快速滑动时记录滑动之前的偏移值
@@ -191,30 +191,47 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 return false
             } else {
                 val tableConfig = mTable.tableConfig
-                val highLightRowIndex: Int
-                val highLightColumnIndex: Int
+                var highLightRowIndex: Int
+                var highLightColumnIndex: Int
 
                 highLightRowIndex =
-                    if (mClickColumnIndex != 0 || !tableConfig.isHighLightSelectColumn
+                    if (!tableConfig.isHighLightSelectRow || mClickColumnIndex != 0
                         || mClickRowIndex == 0
                         && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE
                                 || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.COLUMN)
                     ) {
+                        // 不需要高亮选中行或点击的不是第一列或点击的是第一行第一列，但是第一行第一列单元格不高亮选中行
                         TableConfig.INVALID_VALUE
                     } else {
                         // 点击第一列内容表示行需要高亮，记录高亮行位置
                         mClickRowIndex
                     }
 
-                highLightColumnIndex = if (mClickRowIndex != 0 || !tableConfig.isHighLightSelectRow
-                    || mClickColumnIndex == 0
-                    && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE
-                            || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.ROW)
-                ) {
-                    TableConfig.INVALID_VALUE
-                } else {
-                    // 点击第一行内容表示列需要高亮，记录高亮列位置
-                    mClickColumnIndex
+                highLightColumnIndex =
+                    if (!tableConfig.isHighLightSelectColumn || mClickRowIndex != 0
+                        || mClickColumnIndex == 0
+                        && (tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.NONE
+                                || tableConfig.firstRowColumnCellHighLightType == FirstRowColumnCellActionType.ROW)
+                    ) {
+                        // 不需要高亮选中列或点击的不是第一行或点击的是第一行第一列，但是第一行第一列单元格不高亮选中列
+                        TableConfig.INVALID_VALUE
+                    } else {
+                        // 点击第一行内容表示列需要高亮，记录高亮列位置
+                        mClickColumnIndex
+                    }
+
+                if (tableConfig.isBothHighLightRowAndColumn && (mClickRowIndex == 0 || mClickColumnIndex == 0)) {
+                    if (highLightRowIndex == TableConfig.INVALID_VALUE
+                        && this@TouchHelper.highLightRowIndex != TableConfig.INVALID_VALUE
+                    ) {
+                        highLightRowIndex = this@TouchHelper.highLightRowIndex
+                    }
+
+                    if (highLightColumnIndex == TableConfig.INVALID_VALUE
+                        && this@TouchHelper.highLightColumnIndex != TableConfig.INVALID_VALUE
+                    ) {
+                        highLightColumnIndex = this@TouchHelper.highLightColumnIndex
+                    }
                 }
 
                 if (highLightRowIndex != this@TouchHelper.highLightRowIndex || highLightColumnIndex != this@TouchHelper.highLightColumnIndex) {
@@ -223,7 +240,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                     notifyViewChanged()
                 }
 
-                cellClickListener?.invoke(mClickRowIndex, mClickColumnIndex)
+                mCellClickListener?.invoke(mClickRowIndex, mClickColumnIndex)
                 return true
             }
         }
@@ -315,9 +332,16 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     }
 
     /**
+     * 设置单元格点击监听
+     */
+    fun setCellClickListener(listener: CellClickListener?) {
+        mCellClickListener = listener
+    }
+
+    /**
      * 处理事件分发
      */
-    fun dispatchTouchEvent(view: View, event: MotionEvent): Boolean {
+    internal fun dispatchTouchEvent(view: View, event: MotionEvent): Boolean {
         val parent = view.parent
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -351,7 +375,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     /**
      * 处理触摸时间
      */
-    fun onTouchEvent(event: MotionEvent): Boolean {
+    internal fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_MOVE -> if (mLongPressDone) {
                 val dispose = dragChangeSize(
@@ -383,7 +407,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     /**
      * 屏幕宽高发送变化
      */
-    fun onScreenSizeChange() {
+    internal fun onScreenSizeChange() {
         judgeNeedUpdateTable(scrollX, scrollY)
     }
 
@@ -513,12 +537,13 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
         val dragChangeSizeColumnIndex: Int
 
         dragChangeSizeRowIndex =
-            if (mClickColumnIndex != 0
-                || tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE
+            if (tableConfig.rowDragChangeHeightType == DragChangeSizeType.NONE
+                || mClickColumnIndex != 0
                 || mClickRowIndex == 0
                 && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE
                         || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.COLUMN)
             ) {
+                // 不需要拖拽改变行高，或点击的不是第一列或点击的是第一行第一列，但是第一行第一列单元格不需要拖拽改变行高
                 TableConfig.INVALID_VALUE
             } else {
                 // 点击第一列内容表示行需要高亮，记录高亮行位置
@@ -526,12 +551,13 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
             }
 
         dragChangeSizeColumnIndex =
-            if (mClickRowIndex != 0
-                || tableConfig.columnDragChangeWidthType == DragChangeSizeType.NONE
+            if (tableConfig.columnDragChangeWidthType == DragChangeSizeType.NONE
+                || mClickRowIndex != 0
                 || mClickColumnIndex == 0
                 && (tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.NONE
                         || tableConfig.firstRowColumnCellDragType == FirstRowColumnCellActionType.ROW)
             ) {
+                // 不需要拖拽改变列宽，或点击的不是第一行或点击的是第一行第一列，但是第一行第一列单元格不需要拖拽改变列宽
                 TableConfig.INVALID_VALUE
             } else {
                 // 点击第一行内容表示列需要高亮，记录高亮列位置

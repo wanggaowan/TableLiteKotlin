@@ -134,6 +134,11 @@ class TableConfig {
     var isHighLightSelectColumn: Boolean = false
 
     /**
+     * 当用户点击第一行或第一列时，是否同时高亮选中的行和列
+     */
+    var isBothHighLightRowAndColumn: Boolean = false
+
+    /**
      * 第一行第一列单元格点击时高亮处理方式,取值参考[FirstRowColumnCellActionType]
      */
     @FirstRowColumnCellActionType

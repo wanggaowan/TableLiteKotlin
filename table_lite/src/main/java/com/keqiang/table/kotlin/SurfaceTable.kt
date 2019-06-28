@@ -357,4 +357,32 @@ internal class SurfaceTable<T : Cell>
     fun syncReDrawCell(row: Int, column: Int, data: Any) {
         mTableRender.reDrawCell(row, column, data)
     }
+
+    /**
+     * 设置新数据(异步操作，可在任何线程调用)，数据处理完成后会主动调用界面刷新操作。
+     * 调用此方法之前，请确保[ITable.cellFactory]不为null，否则将不做任何处理。
+     * 更多数据处理方法，请获取[tableData]
+     *
+     * @param totalRow    表格行数
+     * @param totalColumn 表格列数
+     */
+    fun setNewData(totalRow: Int, totalColumn: Int) {
+        mTableData.setNewData(totalRow, totalColumn)
+    }
+
+    /**
+     * 清除表格数据，异步操作，数据处理完成后会主动调用界面刷新操作。
+     * 更多数据处理方法，请获取[tableData]
+     */
+    fun clearData() {
+        mTableData.clear()
+    }
+
+    /**
+     * 设置单元格点击监听
+     * 更多触摸处理方法，请获取[touchHelper]
+     */
+    fun setCellClickListener(listener: CellClickListener?) {
+        touchHelper.setCellClickListener(listener)
+    }
 }

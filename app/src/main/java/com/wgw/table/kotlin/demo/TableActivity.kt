@@ -27,25 +27,26 @@ class TableActivity : AppCompatActivity() {
         setContentView(R.layout.activity_table)
         mTable = findViewById(R.id.table)
 
-        //        mTable.getTableConfig().setColumnWidth(200);
-//        mTable.tableConfig.rowHeight = 100
+        // mTable.getTableConfig().setColumnWidth(200);
+        // mTable.tableConfig.rowHeight = 100
         mTable.tableConfig.addRowFix(0, FixGravity.TOP_ROW)
-//        mTable.tableConfig.addRowFix(3, FixGravity.TOP_ROW)
-//        mTable.tableConfig.addRowFix(5, FixGravity.TOP_ROW)
-//
+        // mTable.tableConfig.addRowFix(3, FixGravity.TOP_ROW)
+        // mTable.tableConfig.addRowFix(5, FixGravity.TOP_ROW)
+        //
         mTable.tableConfig.addColumnFix(0, FixGravity.LEFT_COLUMN)
-//        mTable.tableConfig.addColumnFix(3, FixGravity.LEFT_COLUMN)
-//        mTable.tableConfig.addColumnFix(5, FixGravity.LEFT_COLUMN)
+        // mTable.tableConfig.addColumnFix(3, FixGravity.LEFT_COLUMN)
+        // mTable.tableConfig.addColumnFix(5, FixGravity.LEFT_COLUMN)
 
         mTable.tableConfig.isHighLightSelectRow = true
         mTable.tableConfig.isHighLightSelectColumn = true
+        mTable.tableConfig.isBothHighLightRowAndColumn = true
         mTable.tableConfig.firstRowColumnCellHighLightType = FirstRowColumnCellActionType.BOTH
 
         mTable.tableConfig.rowDragChangeHeightType = DragChangeSizeType.LONG_PRESS
         mTable.tableConfig.columnDragChangeWidthType = DragChangeSizeType.LONG_PRESS
         mTable.tableConfig.firstRowColumnCellDragType = FirstRowColumnCellActionType.BOTH
 
-//        mTable.tableConfig.needRecoveryHighLightOnDragChangeSizeEnded = false
+        // mTable.tableConfig.needRecoveryHighLightOnDragChangeSizeEnded = false
 
         mTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         mTextPaint.textSize = 30f
@@ -129,7 +130,7 @@ class TableActivity : AppCompatActivity() {
     }
 
     inner class TestTextCellDraw : TextCellDraw<Cell>() {
-        private var mDrawConfig: TextCellDraw.DrawConfig = TextCellDraw.DrawConfig()
+        private var mDrawConfig: DrawConfig = DrawConfig()
 
         init {
             mDrawConfig.textColor = Color.BLACK
@@ -140,7 +141,7 @@ class TableActivity : AppCompatActivity() {
             mDrawConfig.backgroundColor = Color.LTGRAY
         }
 
-        override fun getConfig(row: Int, column: Int): TextCellDraw.DrawConfig {
+        override fun getConfig(row: Int, column: Int): DrawConfig {
             mDrawConfig.isDrawBackground = row == 0 || column == 0
             return mDrawConfig
         }
