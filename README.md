@@ -23,7 +23,7 @@ Android 轻量版Table组件。[Java语言版本](https://github.com/wanggaowan/
 2. 增加依赖
    ```groovy
    dependencies {
-        implementation 'com.github.wanggaowan:TableLiteKotlin:1.6'
+        implementation 'com.github.wanggaowan:TableLiteKotlin:1.7'
    }
    ```
 
@@ -57,6 +57,7 @@ Android 轻量版Table组件。[Java语言版本](https://github.com/wanggaowan/
  - 设置单元格点击监听
  - 设置Fling手势滑动速率，滑动方向（横向，纵向或双向）以及表格实际大小相较于
  显示区域大小的多少倍时才处理Fling手势
+ - 滑动表格到指定位置
 
 **4.CellFactory(接口)，用于动态获取单元格(Cell)数据，Cell用于设置单元格宽高
 以及如果要自适应宽高时实现测量宽高值逻辑，另外将数据源绑定到Cell，这样就无需接口

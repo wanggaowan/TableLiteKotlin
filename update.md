@@ -1,4 +1,7 @@
 ### 更新日志
+- v1.7
+  > 修复Table被修改ScrollX和ScrollY时绘制异常Bug，因此禁止外部调用Table的setScrollY、setScrollX和scrollTo方法（这三个方法是空实现），如果要代码滑动表格，可调用TouchHelper中对应的方法
+
 - v1.6
   > * Table新增setNewData、clearData、setCellClickListener三个方法，
  当然你也可以通过获取TableData和TouchHelper实例来调用相关方法

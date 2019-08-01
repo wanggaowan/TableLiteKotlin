@@ -326,6 +326,36 @@ internal class SurfaceTable<T : Cell>
         AsyncExecutor.shutdownNow()
     }
 
+    /**
+     * 禁止外部调用,这会导致绘制位置异常。
+     * 有关获取和设置滑动的ScrollY值，可通过[TouchHelper]操作，
+     * 不在此方法调用[TouchHelper]对应方法，还是防止一些第三库，
+     * 比如SmartRefreshLayout调用此方法，导致滑动到用户不希望滑动的位置
+     */
+    override fun setScrollY(value: Int) {
+        // super.setScrollY(value);
+    }
+
+    /**
+     * 禁止外部调用,这会导致绘制位置异常。
+     * 有关获取和设置滑动的ScrollX值，可通过[TouchHelper]操作，
+     * 不在此方法调用[TouchHelper]对应方法，还是防止一些第三库，
+     * 比如SmartRefreshLayout调用此方法，导致滑动到用户不希望滑动的位置
+     */
+    override fun setScrollX(value: Int) {
+        // super.setScrollX(value);
+    }
+
+    /**
+     * 禁止外部调用,这会导致绘制位置异常。
+     * 有关获取和设置滑动的ScrollX值、ScrollY值，可通过[TouchHelper]操作，
+     * 不在此方法调用[TouchHelper]对应方法，还是防止一些第三库，
+     * 比如SmartRefreshLayout调用此方法，导致滑动到用户不希望滑动的位置
+     */
+    override fun scrollTo(x: Int, y: Int) {
+        // super.scrollTo(x, y);
+    }
+
     override fun asyncReDraw() {
         // surfaceView可以直接在非主线程中调用绘制
         mTableRender.draw()
