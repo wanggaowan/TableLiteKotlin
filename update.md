@@ -1,6 +1,6 @@
 ### 更新日志
 - v1.8
-  > 修复1.7版本中scrollTo方法、setScrollY方法、setScrollX方法之间无限递归调用Bug，请不要使用1.7版本
+  > 修复1.7版本中scrollTo方法、setScrollY方法、setScrollX方法之间无限递归调用Bug，现在setScrollY和setScrollX调整为scrollY和scrollX。请不要使用1.7版本。
 
 - v1.7
   > 修复Table被修改ScrollX和ScrollY时绘制异常Bug，因此禁止外部调用Table的setScrollY、setScrollX和scrollTo方法（这三个方法是空实现），如果要代码滑动表格，可调用TouchHelper中对应的方法

@@ -341,14 +341,14 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     /**
      * 设置X轴滑动距离
      */
-    fun setScrollX(scrollX: Int) {
+    fun scrollX(scrollX: Int) {
         scrollTo(scrollX, scrollY)
     }
 
     /**
      * 设置Y轴滑动距离
      */
-    fun setScrollY(scrollY: Int) {
+    fun scrollY(scrollY: Int) {
         scrollTo(scrollX, scrollY)
     }
 
