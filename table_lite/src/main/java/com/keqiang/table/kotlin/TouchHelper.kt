@@ -65,17 +65,13 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
      * 水平滑动时滑出部分离控件左边的距离
      */
     var scrollX: Int = 0
-        set(value) {
-            scrollTo(value, scrollY)
-        }
+        private set
 
     /**
      * 垂直滑动时滑出部分离控件顶部的距离
      */
     var scrollY: Int = 0
-        set(value) {
-            scrollTo(scrollX, value)
-        }
+        private set
 
     /**
      * @return 需要绘制蒙层的行Index
@@ -340,6 +336,20 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
      */
     fun setCellClickListener(listener: CellClickListener?) {
         mCellClickListener = listener
+    }
+
+    /**
+     * 设置X轴滑动距离
+     */
+    fun setScrollX(scrollX: Int) {
+        scrollTo(scrollX, scrollY)
+    }
+
+    /**
+     * 设置Y轴滑动距离
+     */
+    fun setScrollY(scrollY: Int) {
+        scrollTo(scrollX, scrollY)
     }
 
     /**
