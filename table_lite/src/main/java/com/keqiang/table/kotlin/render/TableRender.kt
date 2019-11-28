@@ -126,6 +126,17 @@ open class TableRender<T : Cell>(protected val mTable: ITable<T>) {
         ShowCell.recycleInstances(mShowCells)
         mShowCells.clear()
         statisticsTableActualSize()
+        if (showRect.width() >= mActualSizeRect.width()) {
+            mTable.touchHelper.scrollX = 0
+        } else if (showRect.width() + mTable.touchHelper.scrollX >= mActualSizeRect.width()) {
+            mTable.touchHelper.scrollX = mActualSizeRect.width() - showRect.width()
+        }
+
+        if (showRect.height() >= mActualSizeRect.height()) {
+            mTable.touchHelper.scrollY = 0
+        } else if (showRect.height() + mTable.touchHelper.scrollY >= mActualSizeRect.height()) {
+            mTable.touchHelper.scrollY = mActualSizeRect.height() - showRect.height()
+        }
 
         val fixTopRowHeight = drawRowFixTop(canvas)
         val fixBottomRowHeight = drawRowFixBottom(canvas, fixTopRowHeight)
