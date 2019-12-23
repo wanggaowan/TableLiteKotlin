@@ -107,6 +107,11 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
     private var mCellClickListener: CellClickListener? = null
 
     /**
+     * 单元格拖拽监听
+     */
+    private var mCellDragChangeListener: CellDragChangeListener? = null
+
+    /**
      * 快速滑动时记录滑动之前的偏移值
      */
     private var mTempScrollX: Int = 0
@@ -336,6 +341,13 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
      */
     fun setCellClickListener(listener: CellClickListener?) {
         mCellClickListener = listener
+    }
+
+    /**
+     * 设置单元格点击监听
+     */
+    fun setCellDragChangeListener(listener: CellDragChangeListener?) {
+        mCellDragChangeListener = listener
     }
 
     /**
@@ -628,6 +640,8 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 } else if (mustNotifyViewChange) {
                     notifyViewChanged()
                 }
+
+                mCellDragChangeListener?.invoke(dragRowIndex, dragColumnIndex)
             } else if (dragChangeSizeRowIndex != TableConfig.INVALID_VALUE) {
                 if (!mLongPressDone && tableConfig.rowDragChangeHeightType == DragChangeSizeType.LONG_PRESS) {
                     return false
@@ -652,6 +666,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 } else if (mustNotifyViewChange) {
                     notifyViewChanged()
                 }
+                mCellDragChangeListener?.invoke(dragRowIndex, dragColumnIndex)
             } else {
                 if (!mLongPressDone && tableConfig.columnDragChangeWidthType == DragChangeSizeType.LONG_PRESS) {
                     return false
@@ -676,6 +691,7 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
                 } else if (mustNotifyViewChange) {
                     notifyViewChanged()
                 }
+                mCellDragChangeListener?.invoke(dragRowIndex, dragColumnIndex)
             }
             return true
         }
@@ -701,3 +717,9 @@ class TouchHelper<T : Cell>(private val mTable: ITable<T>) {
  * 单元格点击监听
  */
 typealias CellClickListener = (row: Int, column: Int) -> Unit
+
+/**
+ * 单元格拖拽监听,row为正在拖拽的行，如果拖拽改变的只是列宽，此值为[TableConfig.INVALID_VALUE]。
+ * column为正在拖拽的列，如果拖拽改变的只是行高，此值为此值为[TableConfig.INVALID_VALUE]。
+ */
+typealias CellDragChangeListener = (row: Int, column: Int) -> Unit

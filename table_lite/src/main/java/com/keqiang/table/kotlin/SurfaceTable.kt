@@ -415,4 +415,12 @@ internal class SurfaceTable<T : Cell>
     fun setCellClickListener(listener: CellClickListener?) {
         touchHelper.setCellClickListener(listener)
     }
+
+    /**
+     * 设置单元格拖拽监听
+     * 更多触摸处理方法，请获取[touchHelper]
+     */
+    fun setCellDragChangeListener(listener: CellDragChangeListener?) {
+        touchHelper.setCellDragChangeListener(listener)
+    }
 }
